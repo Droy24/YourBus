@@ -44,12 +44,13 @@ public class User {
 	@Column(name = "answer")
 	private String answer;
 
-	public User(){}
-	
+	public User() {
+	}
+
 	public User(String name, String email, String username, String password, String question, String answer,
 			String mobile, String address, int insurance, Date birthday, int age) {
-		
-//		this.userid = userid;
+
+		// this.userid = userid;
 		this.name = name;
 		this.email = email;
 		this.username = username;
@@ -95,7 +96,7 @@ public class User {
 	String address;
 
 	@Column(name = "insurance")
-	int insurance;						// boolean type
+	int insurance; // boolean type
 
 	@Column(name = "date")
 	private Date birthday;
@@ -176,13 +177,13 @@ public class User {
 		this.wallet = wallet;
 	}
 
-//	public List<Ticket> getTicket() {
-//		return ticket;
-//	}
-//
-//	public void setTicket(List<Ticket> ticket) {
-//		this.ticket = ticket;
-//	}
+	// public List<Ticket> getTicket() {
+	// return ticket;
+	// }
+	//
+	// public void setTicket(List<Ticket> ticket) {
+	// this.ticket = ticket;
+	// }
 
 	public String getMobile() {
 		return mobile;

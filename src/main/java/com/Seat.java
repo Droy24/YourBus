@@ -42,7 +42,7 @@ public class Seat {
     @JoinColumn(name = "busId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-	Bus bus;
+    private Bus bus;
 
 	public Seat() {
 	}

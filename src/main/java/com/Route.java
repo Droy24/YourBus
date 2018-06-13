@@ -51,16 +51,15 @@ public class Route {
 		this.distance = distance;
 	}
 	
-	/*
 	public void addStationInList(Station addst) {
-		route.add(addst);
+		stops.add(addst);
 	}
 	
 	public void addAfterStation(Station station1, Station addStation) {
-		int index = this.route.indexOf(station1);
-		this.route.add(index, addStation);
+		int index = this.stops.indexOf(station1);
+		this.stops.add(index, addStation);
 	}
-	*/
+	
 	public int getRouteId() {
 		return this.routeId;
 	}

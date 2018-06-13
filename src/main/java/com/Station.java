@@ -69,7 +69,7 @@ public class Station {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "stops")
-	List<Bus> busList;
+	private List<Bus> busList;
 
 	public void setStationId(Integer stationId) {
 		this.stationId = stationId;

@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -37,21 +36,21 @@ public class Ticket {
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinTable(name = "ticket_passenger")
-	List<User> passengers; // map
+	private List<User> passengers; // map
 
 	@Column(name = "fare")
 	private int fare;
 
 	// @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@Column(name = "source")
-	String source;
+	private String source;
 
 	// @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@Column(name = "destination")
-	String destination;
+	private String destination;
 
 	@Column(name = "busName")
-	String busName;
+	private String busName;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "busid")

@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.Wrapper.BusDTO;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -39,11 +40,14 @@ public class Bus {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable
-	List<Seat> seat;
+	private List<Seat> seat;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinTable(name = "bus_stops")
-	List<Station> stops;
+	private List<Station> stops;
+	
+	@OneToOne
+	private Route route;
 
 	@Column(name = "dailystarttime")
 	private Time dailyStartTime;
@@ -51,32 +55,15 @@ public class Bus {
 	@Column(name = "dailyStoptime")
 	private Time dailyStopTime;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Employee driver;
-
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Employee conductor;
-
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Employee busOwner;
 
 	@Column(name = "busType")
 	private String busType;
 
-	public Bus(Long busId, String plateName, int seats, List<Seat> seat, List<Station> stops, String dailyStartTime,
-			String dailyStopTime, Employee driver, Employee conductor, Employee busOwner, String bustype) {
+	public Bus(Long busId,String plateName,String busType) {
 		this.busId = busId;
 		this.plateName = plateName;
 		// this.seatsbooked = seatsbooked;
-		this.seats = seats;
-		this.seat = seat;
-		this.stops = stops;
-		this.dailyStartTime = java.sql.Time.valueOf(dailyStartTime);
-		this.dailyStopTime = java.sql.Time.valueOf(dailyStartTime);
-		this.driver = driver;
-		this.conductor = conductor;
-		this.busOwner = busOwner;
-		this.busType = bustype;
+		this.busType = busType;
 	}
 
 	public int getSeatsbooked() {
@@ -122,17 +109,14 @@ public class Bus {
 	public Bus() {
 	}
 
-	public Bus(Long busId, String plateName, String dailyStartTime, String dailyStopTime, Employee driver,
-			Employee conductor, Employee busOwner, String type, Employee owner, int totalseats) {
+	public Bus(Long busId, String plateName, String dailyStartTime, String dailyStopTime, String type, Employee owner, int totalseats) {
 		this.seats = totalseats;
 		// this.seatsbooked=seatsbooked;
 		this.busId = busId;
 		this.plateName = plateName;
 		this.dailyStartTime = java.sql.Time.valueOf(dailyStartTime);
 		this.dailyStopTime = java.sql.Time.valueOf(dailyStopTime);
-		this.driver = driver;
-		this.conductor = conductor;
-		this.busOwner = busOwner;
+		
 		// this.stop = stop;
 		this.busType = type;
 	}
@@ -169,43 +153,15 @@ public class Bus {
 		this.dailyStopTime = dailyStopTime;
 	}
 
-	public Employee getDriver() {
-		return driver;
-	}
-
-	public void setDriver(Employee driver) {
-		this.driver = driver;
-	}
-
-	public Employee getConductor() {
-		return conductor;
-	}
-
-	public void setConductor(Employee conductor) {
-		this.conductor = conductor;
-	}
-
-	public Employee getBusOwner() {
-		return busOwner;
-	}
-
-	public void setBusOwner(Employee busOwner) {
-		this.busOwner = busOwner;
-	}
-
-	// public List<Station> getStop() {
-	// return stop;
-	// }
-	//
-	// public void setStop(List<Station> stop) {
-	// this.stop = stop;
-	// }
-
 	public String getType() {
 		return busType;
 	}
 
 	public void setType(String type) {
 		this.busType = type;
+	}
+	
+	public void setBus(BusDTO busdto) {
+		
 	}
 }
