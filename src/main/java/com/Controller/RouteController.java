@@ -13,29 +13,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Route;
+import com.Entity.Route;
 import com.Service.RouteService;
+import com.Wrapper.RouteDTO;
 
 @RestController
 @RequestMapping("/route")
 public class RouteController {
+	
 	@Autowired
-	RouteService routeService;
+	private RouteService routeService;
 
 	@PostMapping
 	@ResponseBody
-	public String newacc(@RequestBody List<Route> acc) {
+	public String newacc(@RequestBody RouteDTO acc) {
 		return routeService.add(acc);
-
 	}
 
 	@GetMapping(value = "/{id}")
-	public Optional<Route> getid(@PathVariable(value = "id") Integer id) {
+	public RouteDTO getid(@PathVariable(value = "id") Integer id) {
 		return routeService.get(id);
 	}
 
+	
+	
 	@GetMapping()
-	public List<Route> getAll() {
+	public List<RouteDTO> getAll() {
 		return routeService.getAll();
 	}
 
@@ -47,7 +50,7 @@ public class RouteController {
 
 	@DeleteMapping()
 	@ResponseBody
-	public String deleteByBody(@RequestBody List<Route> acc) {
+	public String deleteByBody(@RequestBody List<RouteDTO> acc) {
 		return routeService.delete(acc);
 	}
 

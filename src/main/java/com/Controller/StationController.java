@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Station;
+import com.Entity.Station;
 import com.Service.StationService;
+import com.Wrapper.StationDTO;
 
 @RestController
 @RequestMapping("/stations")
 public class StationController {
 
 	@Autowired
-	StationService stationService;
-//
+	private StationService stationService;
+
 //	@GetMapping(name = "/test")
 //	public void test() {
 //		System.out.println("checking");
@@ -30,7 +31,8 @@ public class StationController {
 
 	@PostMapping
 	@ResponseBody
-	public String newacc(@RequestBody List<Station> acc) {
+	public String newacc(@RequestBody List<StationDTO> acc) {
+		
 		return stationService.add(acc);
 
 	}
@@ -42,12 +44,12 @@ public class StationController {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public Optional<Station> getid(@PathVariable(value = "id") Integer id) {
+	public StationDTO getid(@PathVariable(value = "id") Integer id) {
 		return stationService.get(id);
 	}
 
 	@GetMapping()
-	public List<Station> getAll() {
+	public List<StationDTO> getAll() {
 		return stationService.getAll();
 	}
 
@@ -59,7 +61,7 @@ public class StationController {
 
 	@DeleteMapping()
 	@ResponseBody
-	public String deleteByBody(@RequestBody List<Station> acc) {
+	public String deleteByBody(@RequestBody List<StationDTO> acc) {
 		return stationService.delete(acc);
 	}
 }

@@ -1,7 +1,6 @@
 package com.Controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,35 +12,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Bus;
 import com.Service.BusService;
+import com.Wrapper.BusDTO;
 
 @RestController
 @RequestMapping("/bus")
 public class BusController {
 
 	@Autowired
-	BusService busService;
+	private BusService busService;
 
-//	@GetMapping(name = "/test")
-//	public void test() {
-//		System.out.println("checking");
-//	}
+	// @GetMapping(name = "/test")
+	// public void test() {
+	// System.out.println("checking");
+	// }
 
 	@PostMapping
 	@ResponseBody
-	public String newacc(@RequestBody List<Bus> acc) {
+	public String newacc(@RequestBody List<BusDTO> acc) {
+		System.out.println("in controller");
 		return busService.add(acc);
-
 	}
-	
+
 	@GetMapping(value = "/{id}")
-	public Optional<Bus> getid(@PathVariable(value = "id") Integer id) {
+	public BusDTO getid(@PathVariable(value = "id") Integer id) {
 		return busService.get(id);
 	}
 
 	@GetMapping()
-	public List<Bus> getAll() {
+	public List<BusDTO> getAll() {
 		return busService.getAll();
 	}
 
@@ -53,7 +52,7 @@ public class BusController {
 
 	@DeleteMapping()
 	@ResponseBody
-	public String deleteByBody(@RequestBody List<Bus> bus) {
+	public String deleteByBody(@RequestBody List<BusDTO> bus) {
 		return busService.delete(bus);
 	}
 }

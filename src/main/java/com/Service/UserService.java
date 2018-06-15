@@ -6,17 +6,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.User;
+import com.Entity.User;
 import com.Repository.UserRepository;
 
 @Service
 public class UserService {
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	public String add(List<User> acc) {
-		// TODO Auto-generated method stub
 		System.out.println("in User add");
 		for (User a : acc) {
 			userRepository.save(a);
@@ -25,19 +24,16 @@ public class UserService {
 	}
 
 	public List<User> getAll() {
-		// TODO Auto-generated method stub
 		System.out.println("User get all");
 		return userRepository.findAll();
 	}
 
 	public Optional<User> get(Integer id) {
-		// TODO Auto-generated method stub
 		System.out.println("User get");
 		return userRepository.findById(id);
 	}
 
 	public String delete(Integer id) {
-		// TODO Auto-generated method stub
 		System.out.println("User delete");
 		Optional<User> user= userRepository.findById(id);
 		if(user==null)return "Id does not exist";
@@ -46,7 +42,6 @@ public class UserService {
 	}
 
 	public String delete(List<User> acc) {
-		// TODO Auto-generated method stub
 		System.out.println("Service delete all");
 		int count=0;
 		int notfound=0;
@@ -62,7 +57,6 @@ public class UserService {
 	}
 
 	public String login(List<User> details) {
-		// TODO Auto-generated method stub
 		String username="";
 		String password="";
 		for(User u: details ) {
@@ -76,7 +70,6 @@ public class UserService {
 	}
 
 	public String forgot(User user) {
-		// TODO Auto-generated method stub
 		
 		String username = user.getUsername();
 		String question=user.getQuestion();
@@ -86,5 +79,4 @@ public class UserService {
 		if(us.isEmpty())return "Wrong entry";
 		else return us.toString();
 	}
-	
 }

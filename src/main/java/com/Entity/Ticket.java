@@ -1,4 +1,4 @@
-package com;
+package com.Entity;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class Ticket {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int ticketId;
+	private Integer ticketId;
 
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
@@ -63,14 +63,14 @@ public class Ticket {
 	public Ticket() {
 	}
 
-	public Ticket(int ticketId, int fare, String source, String destination, Bus busId, Transaction trans) {
+	public Ticket(Integer ticketId, int fare, String source, String destination, Bus busId, Transaction trans) {
 		this.ticketId = ticketId;
 		this.fare = fare;
 		this.source = source;
 		this.destination = destination;
 	}
 
-	public Ticket(int ticketId, List<String> passengers, int fare, String source, String destination, Bus busId,
+	public Ticket(Integer ticketId, List<String> passengers, int fare, String source, String destination, Bus busId,
 			Transaction trans) {
 
 		this.ticketId = ticketId;
@@ -82,7 +82,7 @@ public class Ticket {
 		this.trans = trans;
 	}
 
-	public Ticket(int ticketId, int fare, Bus busId, String busName, Transaction trans) {
+	public Ticket(Integer ticketId, int fare, Bus busId, String busName, Transaction trans) {
 		this.ticketId = ticketId;
 		this.busName = busName;
 		// this.passengers = passengers;
@@ -97,11 +97,11 @@ public class Ticket {
 		return passengers.size();
 	}
 */
-	public int getTicketId() {
+	public Integer getTicketId() {
 		return ticketId;
 	}
 
-	public void setTicketId(int ticketId) {
+	public void setTicketId(Integer ticketId) {
 		this.ticketId = ticketId;
 	}
 /*

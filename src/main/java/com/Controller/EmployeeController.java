@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Employee;
+import com.Entity.Employee;
 import com.Service.EmployeeService;
 
 @RestController
@@ -21,7 +21,7 @@ import com.Service.EmployeeService;
 public class EmployeeController {
 
 	@Autowired
-	EmployeeService employeeservice;
+	private EmployeeService employeeservice;
 
 	@PostMapping
 	@ResponseBody

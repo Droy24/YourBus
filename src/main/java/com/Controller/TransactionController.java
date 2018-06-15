@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Transaction;
+import com.Entity.Transaction;
 import com.Service.TransactionService;
 
 @RestController
@@ -21,7 +21,7 @@ import com.Service.TransactionService;
 public class TransactionController {
 
 	@Autowired
-	TransactionService transactionService;
+	private TransactionService transactionService;
 
 //	@GetMapping(name = "/test")
 //	public void test() {

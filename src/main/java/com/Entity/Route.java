@@ -1,7 +1,9 @@
-package com;
+package com.Entity;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.Wrapper.RouteDTO;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -29,12 +32,34 @@ public class Route {
 	
 	private String destination;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval=true)
 	@JoinTable(name="Route_stations")
-	private List<Station> stops;
+	private List<Station> stops= new ArrayList<>();
 	
+	public Route() {}
+	
+	public Route(RouteDTO routeDto) {
+		this.routeId=routeDto.getRouteId();
+		this.source=routeDto.getSource();
+		this.destination=routeDto.getDestination();
+		if(routeDto.getStops()!=null) {
+		this.stops=routeDto.getStops().stream().map(s->new Station(s)).collect(Collectors.toList());}
+	}
+	
+	public Route(Integer routeId, String source, String destination, List<Station> stops,
+			LinkedList<Integer> distance) {
+		this.routeId = routeId;
+		this.source = source;
+		this.destination = destination;
+		this.stops = stops;
+		this.distance = distance;
+	}
+
 	private LinkedList<Integer> distance;
 	
+	public LinkedList<Integer> getDistance() {
+		return distance;
+	}
 	public int getTotalDistance(Station start,Station end) {
 		int startIndex=stops.indexOf(start);
 		int endIndex=stops.indexOf(end);
@@ -59,37 +84,37 @@ public class Route {
 		int index = this.stops.indexOf(station1);
 		this.stops.add(index, addStation);
 	}
-	
-	public int getRouteId() {
-		return this.routeId;
+
+	public Integer getRouteId() {
+		return routeId;
 	}
-	
-	public void setRouteId(int routeid) {
-		this.routeId = routeid;
+
+	public void setRouteId(Integer routeId) {
+		this.routeId = routeId;
 	}
-	
+
 	public String getSource() {
 		return source;
 	}
-	
+
 	public void setSource(String source) {
 		this.source = source;
 	}
-	
+
 	public String getDestination() {
 		return destination;
 	}
-	
+
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	
+
 	public List<Station> getStops() {
 		return stops;
 	}
-	
+
 	public void setStops(List<Station> stops) {
 		this.stops = stops;
 	}
-	
+
 }

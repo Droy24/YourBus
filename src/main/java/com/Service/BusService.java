@@ -1,63 +1,76 @@
 package com.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.Bus;
+import com.Entity.Bus;
 import com.Repository.BusRepository;
+import com.Wrapper.BusDTO;
 
 @Service
 public class BusService {
 
 	@Autowired
-	BusRepository busrepository;
+	private BusRepository busrepository;
+	
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public String add(List<Bus> acc) {
-		// TODO Auto-generated method stub
+	public String add(List<BusDTO> dto) {
+		logger.info("To save and update Bus.");
 		System.out.println("in bus add");
-		for (Bus a : acc) {
-			busrepository.save(a);
+		for (BusDTO busdto : dto) {
+			busrepository.save(populateBus(busdto));
 		}
 		return "save completed";
 	}
 
-	public List<Bus> getAll() {
-		// TODO Auto-generated method stub
-		System.out.println("Account get all");
-		return busrepository.findAll();
+	private Bus populateBus(BusDTO busdto) {
+		Bus bus = new Bus(busdto);
+		return bus;
 	}
 
-	public Optional<Bus> get(Integer id) {
-		// TODO Auto-generated method stub
+	public List<BusDTO> getAll() {
+		System.out.println("Account get all");
+		List<Bus> bs=busrepository.findAll();
+		List<BusDTO> busdtolist= bs.stream().map(s->new BusDTO(s)).collect(Collectors.toList());
+		return busdtolist;
+	}
+
+	public BusDTO get(Integer id) {
 		System.out.println("Account get");
-		return busrepository.findById(id);
+		Optional<Bus> bus = busrepository.findById(id);
+		if (bus.isPresent()) {
+			return new BusDTO(bus.get());
+		}
+		return null;
 	}
 
 	public String delete(Integer id) {
-		// TODO Auto-generated method stub
 		System.out.println("Account delete");
 		busrepository.deleteById(id);
 		return "Succesful deletion";
 	}
 
-	public String delete(List<Bus> acc) {
-		// TODO Auto-generated method stub
+	public String delete(List<BusDTO> acc) {
 		System.out.println("Account delete all");
-		busrepository.deleteAll(acc);
+		List<Bus> bus = acc.stream().map(s->new Bus(s)).collect(Collectors.toList());
+		busrepository.deleteAll(bus);
 		return "Multiple deletion successful";
 	}
 
-//	public List<Bus> getinbetween(int source, int destination) {
-//		// TODO Auto-generated method stub
-////		List<Bus> lst=new LinkedList<>();
-////		for(Bus ls:Bus) {
-////			
-////		}
-//		return busrepository.findAllByInbetweenContaining(source,destination);
+//	 public List<Bus> getinbetween(int source, int destination) {
+//	 // TODO Auto-generated method stub
+//	// List<Bus> lst=new LinkedList<>();
+//	// for(Bus ls:Bus) {
+//	//
+//	// }
+//	 return busrepository.findAllByInbetweenContaining(source,destination);
 //	
-//	}
+//	 }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Account;
+import com.Entity.Account;
 import com.Service.AccountService;
 
 @RestController
@@ -21,7 +21,7 @@ import com.Service.AccountService;
 public class AccountController {
 	
 	@Autowired
-	AccountService accountService;
+	private AccountService accountService;
 	
 //	@GetMapping(name = "/test")
 //	public void test() {

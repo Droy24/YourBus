@@ -1,7 +1,8 @@
-package com;
+package com.Entity;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,13 +12,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.Wrapper.BusDTO;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -38,24 +39,38 @@ public class Bus {
 	@Column(name = "totalseats")
 	private int seats;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	public Route getRoute() {
+		return route;
+	}
+
+	public void setRoute(Route route) 
+	{
+		this.route = route;
+	}
+
+	public String getBusType() {
+		return busType;
+	}
+
+	public void setBusType(String busType) {
+		this.busType = busType;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval=true)
 	@JoinTable
+	@JsonIgnore
 	private List<Seat> seat;
-
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-	@JoinTable(name = "bus_stops")
-	private List<Station> stops;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval=true)
+	@JsonIgnore
 	private Route route;
-
+	
 	@Column(name = "dailystarttime")
 	private Time dailyStartTime;
-
+	
 	@Column(name = "dailyStoptime")
 	private Time dailyStopTime;
-
-
+	
 	@Column(name = "busType")
 	private String busType;
 
@@ -90,14 +105,6 @@ public class Bus {
 		this.seatsbooked = seatsbooked;
 	}
 
-	public List<Station> getStops() {
-		return stops;
-	}
-
-	public void setStops(List<Station> stops) {
-		this.stops = stops;
-	}
-
 	public int getSeats() {
 		return seats;
 	}
@@ -106,9 +113,25 @@ public class Bus {
 		this.seats = seats;
 	}
 
-	public Bus() {
-	}
+	public Bus() {}
 
+	public Bus(BusDTO busdto) 
+	{
+		this.busId=busdto.getBusId();
+		this.busType=busdto.getBusType();
+		if(busdto.getDailyStartTime()!=null)
+			{this.dailyStartTime=busdto.getDailyStartTime();}
+		if(busdto.getDailyStopTime()!=null)
+		{this.dailyStopTime=busdto.getDailyStopTime();}
+		this.plateName=busdto.getPlateName();
+		if(busdto.getRoute()!=null)
+			this.route=new Route(busdto.getRoute());
+		if(busdto.getSeat()!=null)
+		{this.seat=busdto.getSeat().stream().map(s->new Seat(s)).collect(Collectors.toList());}
+		this.seats=busdto.getSeats();
+		this.seatsbooked=busdto.getSeatsbooked();
+	}
+/*	
 	public Bus(Long busId, String plateName, String dailyStartTime, String dailyStopTime, String type, Employee owner, int totalseats) {
 		this.seats = totalseats;
 		// this.seatsbooked=seatsbooked;
@@ -116,11 +139,10 @@ public class Bus {
 		this.plateName = plateName;
 		this.dailyStartTime = java.sql.Time.valueOf(dailyStartTime);
 		this.dailyStopTime = java.sql.Time.valueOf(dailyStopTime);
-		
 		// this.stop = stop;
 		this.busType = type;
 	}
-
+*/
 	public Long getBusId() {
 		return busId;
 	}
@@ -161,7 +183,5 @@ public class Bus {
 		this.busType = type;
 	}
 	
-	public void setBus(BusDTO busdto) {
-		
-	}
+	
 }

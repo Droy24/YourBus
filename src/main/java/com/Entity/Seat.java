@@ -1,4 +1,4 @@
-package com;
+package com.Entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.Wrapper.SeatDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -44,7 +45,16 @@ public class Seat {
     @JsonIgnore
     private Bus bus;
 
-	public Seat() {
+	public Seat() {	}
+	
+	public Seat(SeatDTO seatdto)
+	{
+		this.armyquota=seatdto.isArmyquota();
+		this.bus= new Bus(seatdto.getBus());
+		this.ladiesquota= seatdto.isLadiesquota();
+		this.oldquota= seatdto.isOldquota();
+		this.physicalquota=seatdto.isPhysicalquota();
+		this.type=seatdto.getType();
 	}
 
 	public Seat(boolean oldquota, boolean ladiesquota, boolean physicalquota, boolean armyquota) {
@@ -105,5 +115,14 @@ public class Seat {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+
+	public Bus getBus() {
+		return bus;
+	}
+
+	public void setBus(Bus bus) {
+		this.bus = bus;
 	}
 }

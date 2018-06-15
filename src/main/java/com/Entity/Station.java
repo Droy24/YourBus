@@ -1,6 +1,7 @@
-package com;
+package com.Entity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -8,16 +9,31 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.lang.Nullable;
+
+import com.Wrapper.StationDTO;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "station")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "stationId",scope = Station.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "stationId", scope = Station.class)
 public class Station {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer stationId;
+
+	private String stationName;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval=true)
+	@Nullable
+	@JsonIgnore
+	private List<Bus> busList;
 
 	@Override
 	public int hashCode() {
@@ -44,16 +60,27 @@ public class Station {
 		return true;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer stationId;
-
-	private String stationName;
-
 	public Station(Integer stationId, String stationname, List<Bus> busList) {
 		this.stationId = stationId;
 		this.stationName = stationname;
 		this.busList = busList;
+	}
+
+	public Station() {
+	}
+
+	public Station(StationDTO stationdto) {
+		this.stationId = stationdto.getStationId();
+		this.stationName = stationdto.getStationName();
+		if(stationdto.getBusList()!=null) {
+			this.busList = stationdto.getBusList().stream().map(b -> new Bus(b)).collect(Collectors.toList());
+		}
+			
+		
+	}
+
+	public Station(Integer stationId) {
+		this.stationId = stationId;
 	}
 
 	public String getStationname() {
@@ -68,17 +95,7 @@ public class Station {
 		return stationId;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "stops")
-	private List<Bus> busList;
-
 	public void setStationId(Integer stationId) {
-		this.stationId = stationId;
-	}
-
-	public Station() {
-	}
-
-	public Station(Integer stationId) {
 		this.stationId = stationId;
 	}
 
@@ -92,6 +109,6 @@ public class Station {
 
 	@Override
 	public String toString() {
-		return "Station [stationId=" + stationId + ", stationName=" + stationName + ", busList=" + busList + "]";
+		return "Station [stationId=" + stationId + ", stationName=" + stationName + "]";
 	}
 }
