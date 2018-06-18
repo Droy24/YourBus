@@ -14,7 +14,18 @@ public class Passenger {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long passengerid;
 	
-	//private Route route;
+	private int fare;
+
+	private String passengerName;
+	
+	public Passenger() {}
+	
+	public Passenger(Long passengerid, int fare, String passengerName) {
+		super();
+		this.passengerid = passengerid;
+		this.fare = fare;
+		this.passengerName = passengerName;
+	}
 	
 	public String getPassengerName() {
 		return passengerName;
@@ -24,10 +35,6 @@ public class Passenger {
 		this.passengerName = passengername;
 	}
 
-	private int fare;
-
-	private String passengerName;
-	
 	public Long getPassengerid() {
 		return passengerid;
 	}
@@ -46,8 +53,7 @@ public class Passenger {
 	
 	/*
 	private Bus bus;
-	
-	
+		
 	public void calculateFare() {
 		String type=bus.getBustype();
 		if(type.equalsIgnoreCase("ac")||type.equalsIgnoreCase("a.c."))this.fare=20*route.getDistance(source ,destination);

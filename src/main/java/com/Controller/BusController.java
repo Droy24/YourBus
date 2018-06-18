@@ -35,7 +35,7 @@ public class BusController {
 	}
 
 	@GetMapping(value = "/{id}")
-	public BusDTO getid(@PathVariable(value = "id") Integer id) {
+	public BusDTO getid(@PathVariable(value = "id") Long id) {
 		return busService.get(id);
 	}
 
@@ -46,7 +46,7 @@ public class BusController {
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseBody
-	public String deleteById(@PathVariable(value = "id") Integer id) {
+	public String deleteById(@PathVariable(value = "id") Long id) {
 		return busService.delete(id);
 	}
 

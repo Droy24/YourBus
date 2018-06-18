@@ -39,6 +39,65 @@ public class Bus {
 	@Column(name = "totalseats")
 	private int seats;
 
+	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST},orphanRemoval=true)
+	@JoinTable
+	@JsonIgnore
+	private List<Seat> seat;
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST},orphanRemoval=true)
+	@JsonIgnore
+	private Route route;
+	
+	@Column(name = "dailystarttime")
+	private Time dailyStartTime;
+	
+	@Column(name = "dailyStoptime")
+	private Time dailyStopTime;
+	
+	@Column(name = "busType")
+	private String busType;
+	
+	public Bus() {}
+
+	public Bus(BusDTO busdto) 
+	{
+		this.busId=busdto.getBusId();
+		this.busType=busdto.getBusType();
+		if(busdto.getDailyStartTime()!=null)
+			{this.dailyStartTime=busdto.getDailyStartTime();}
+		if(busdto.getDailyStopTime()!=null)
+			{this.dailyStopTime=busdto.getDailyStopTime();}
+		this.plateName=busdto.getPlateName();
+		if(busdto.getRoute()!=null)
+			this.route=new Route(busdto.getRoute());
+		if(busdto.getSeat()!=null)
+			{this.seat=busdto.getSeat().stream().map(s->new Seat(s)).collect(Collectors.toList());}
+		this.seats=busdto.getSeats();
+		this.seatsbooked=busdto.getSeatsbooked();
+	}
+/*	
+	public Bus(Long busId, String plateName, String dailyStartTime, String dailyStopTime, String type, Employee owner, int totalseats) {
+		this.seats = totalseats;
+		// this.seatsbooked=seatsbooked;
+		this.busId = busId;
+		this.plateName = plateName;
+		this.dailyStartTime = java.sql.Time.valueOf(dailyStartTime);
+		this.dailyStopTime = java.sql.Time.valueOf(dailyStopTime);
+		// this.stop = stop;
+		this.busType = type;
+	}
+*/
+	public Bus(Long busId,String plateName,String busType) {
+		this.busId = busId;
+		this.plateName = plateName;
+		// this.seatsbooked = seatsbooked;
+		this.busType = busType;
+	}
+
+	public int getSeatsbooked() {
+		return this.seat.size();
+	}
+	
 	public Route getRoute() {
 		return route;
 	}
@@ -54,35 +113,6 @@ public class Bus {
 
 	public void setBusType(String busType) {
 		this.busType = busType;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval=true)
-	@JoinTable
-	@JsonIgnore
-	private List<Seat> seat;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval=true)
-	@JsonIgnore
-	private Route route;
-	
-	@Column(name = "dailystarttime")
-	private Time dailyStartTime;
-	
-	@Column(name = "dailyStoptime")
-	private Time dailyStopTime;
-	
-	@Column(name = "busType")
-	private String busType;
-
-	public Bus(Long busId,String plateName,String busType) {
-		this.busId = busId;
-		this.plateName = plateName;
-		// this.seatsbooked = seatsbooked;
-		this.busType = busType;
-	}
-
-	public int getSeatsbooked() {
-		return this.seat.size();
 	}
 
 	public List<Seat> getSeat() {
@@ -113,36 +143,6 @@ public class Bus {
 		this.seats = seats;
 	}
 
-	public Bus() {}
-
-	public Bus(BusDTO busdto) 
-	{
-		this.busId=busdto.getBusId();
-		this.busType=busdto.getBusType();
-		if(busdto.getDailyStartTime()!=null)
-			{this.dailyStartTime=busdto.getDailyStartTime();}
-		if(busdto.getDailyStopTime()!=null)
-		{this.dailyStopTime=busdto.getDailyStopTime();}
-		this.plateName=busdto.getPlateName();
-		if(busdto.getRoute()!=null)
-			this.route=new Route(busdto.getRoute());
-		if(busdto.getSeat()!=null)
-		{this.seat=busdto.getSeat().stream().map(s->new Seat(s)).collect(Collectors.toList());}
-		this.seats=busdto.getSeats();
-		this.seatsbooked=busdto.getSeatsbooked();
-	}
-/*	
-	public Bus(Long busId, String plateName, String dailyStartTime, String dailyStopTime, String type, Employee owner, int totalseats) {
-		this.seats = totalseats;
-		// this.seatsbooked=seatsbooked;
-		this.busId = busId;
-		this.plateName = plateName;
-		this.dailyStartTime = java.sql.Time.valueOf(dailyStartTime);
-		this.dailyStopTime = java.sql.Time.valueOf(dailyStopTime);
-		// this.stop = stop;
-		this.busType = type;
-	}
-*/
 	public Long getBusId() {
 		return busId;
 	}

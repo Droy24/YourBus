@@ -40,7 +40,7 @@ public class Transaction {
 		this.bank=bank;
 		this.dateOfTransaction=java.time.LocalDate.now();
 	}
-public Transaction(String bank, User uid) {
+	public Transaction(String bank, User uid) {
 	
 //		this.transactionId = transactionid;
 		this();

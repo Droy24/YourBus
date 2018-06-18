@@ -32,9 +32,11 @@ public class Route {
 	
 	private String destination;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval=true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval=true)
 	@JoinTable(name="Route_stations")
 	private List<Station> stops= new ArrayList<>();
+
+	private LinkedList<Integer> distance;
 	
 	public Route() {}
 	
@@ -42,6 +44,7 @@ public class Route {
 		this.routeId=routeDto.getRouteId();
 		this.source=routeDto.getSource();
 		this.destination=routeDto.getDestination();
+		this.distance=routeDto.getDistance();
 		if(routeDto.getStops()!=null) {
 		this.stops=routeDto.getStops().stream().map(s->new Station(s)).collect(Collectors.toList());}
 	}
@@ -54,12 +57,16 @@ public class Route {
 		this.stops = stops;
 		this.distance = distance;
 	}
-
-	private LinkedList<Integer> distance;
 	
-	public LinkedList<Integer> getDistance() {
-		return distance;
+	public void addStationInList(Station addst) {
+		stops.add(addst);
 	}
+	
+	public void addAfterStation(Station station1, Station addStation) {
+		int index = this.stops.indexOf(station1);
+		this.stops.add(index, addStation);
+	}
+
 	public int getTotalDistance(Station start,Station end) {
 		int startIndex=stops.indexOf(start);
 		int endIndex=stops.indexOf(end);
@@ -72,19 +79,14 @@ public class Route {
 		return totalDistance;
 	}
 	
+	public LinkedList<Integer> getDistance() {
+		return distance;
+	}
+
 	public void setDistance(LinkedList<Integer> distance) {
 		this.distance = distance;
 	}
 	
-	public void addStationInList(Station addst) {
-		stops.add(addst);
-	}
-	
-	public void addAfterStation(Station station1, Station addStation) {
-		int index = this.stops.indexOf(station1);
-		this.stops.add(index, addStation);
-	}
-
 	public Integer getRouteId() {
 		return routeId;
 	}

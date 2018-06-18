@@ -13,18 +13,6 @@ import javax.persistence.Table;
 @Table(name = "Employee")
 public class Employee {
 
-	public Employee() {}
-	
-	public Employee(int id, String type, String name, String job, String address, int salary, Date joindate) {
-		this.empId = id;
-		this.type = type;
-		this.name = name;
-		this.job = job;
-		this.address = address;
-		this.salary = salary;
-		this.joinDate = joindate;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "empid")
@@ -48,6 +36,18 @@ public class Employee {
 	@Column(name = "joindate")
 	private Date joinDate;
 
+	public Employee() {}
+	
+	public Employee(int id, String type, String name, String job, String address, int salary, Date joindate) {
+		this.empId = id;
+		this.type = type;
+		this.name = name;
+		this.job = job;
+		this.address = address;
+		this.salary = salary;
+		this.joinDate = joindate;
+	}
+	
 	public int getId() {
 		return empId;
 	}

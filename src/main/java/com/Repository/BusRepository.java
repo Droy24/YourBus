@@ -12,7 +12,7 @@ import com.Entity.Bus;
 import com.Entity.Station;
 
 @Repository
-public interface BusRepository extends JpaRepository<Bus, Integer>{
+public interface BusRepository extends JpaRepository<Bus, Long>{
 /*
 	@Query("Select b from Bus b join b.stops st where :source in st.stationId and :destination in st.stationId")
 	List<Bus> findBusStops( @Param("source") int source, @Param("destination") int destination);

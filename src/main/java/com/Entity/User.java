@@ -43,45 +43,9 @@ public class User {
 
 	@Column(name = "answer")
 	private String answer;
-
-	public User() {
-	}
-
-	public User(String name, String email, String username, String password, String question, String answer,
-			String mobile, String address, int insurance, Date birthday, int age) {
-
-		// this.userid = userid;
-		this.name = name;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.question = question;
-		this.answer = answer;
-		this.mobile = mobile;
-		this.address = address;
-		this.insurance = insurance;
-		this.birthday = birthday;
-		this.age = age;
-	}
-
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	private Account wallet;
-
-	public String getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(String question) {
-		this.question = question;
-	}
-
-	public String getAnswer() {
-		return answer;
-	}
-
-	public void setAnswer(String answer) {
-		this.answer = answer;
-	}
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_ticket", joinColumns = { @JoinColumn(name = "userid") }, inverseJoinColumns = {
@@ -104,6 +68,44 @@ public class User {
 	@Column(name = "age")
 	private int age;
 
+	
+	public User() {
+	}
+
+	public User(String name, String email, String username, String password, String question, String answer,
+			String mobile, String address, int insurance, Date birthday, int age) {
+
+		// this.userid = userid;
+		this.name = name;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.question = question;
+		this.answer = answer;
+		this.mobile = mobile;
+		this.address = address;
+		this.insurance = insurance;
+		this.birthday = birthday;
+		this.age = age;
+	}
+
+	public String getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(String question) {
+		this.question = question;
+	}
+
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
+
+	
 	public int getUserid() {
 		return userid;
 	}
@@ -136,30 +138,6 @@ public class User {
 		this.username = username;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		return true;
-	}
 
 	public String getPassword() {
 		return password;
@@ -176,7 +154,7 @@ public class User {
 	public void setWallet(Account wallet) {
 		this.wallet = wallet;
 	}
-
+	
 	// public List<Ticket> getTicket() {
 	// return ticket;
 	// }
@@ -223,6 +201,31 @@ public class User {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		return true;
 	}
 
 }

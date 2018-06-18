@@ -3,7 +3,6 @@ package com.Entity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,35 +29,10 @@ public class Station {
 
 	private String stationName;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval=true)
+	@OneToMany(fetch = FetchType.LAZY)
 	@Nullable
 	@JsonIgnore
 	private List<Bus> busList;
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((stationId == null) ? 0 : stationId.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Station other = (Station) obj;
-		if (stationId == null) {
-			if (other.stationId != null)
-				return false;
-		} else if (!stationId.equals(other.stationId))
-			return false;
-		return true;
-	}
 
 	public Station(Integer stationId, String stationname, List<Bus> busList) {
 		this.stationId = stationId;
@@ -72,11 +46,9 @@ public class Station {
 	public Station(StationDTO stationdto) {
 		this.stationId = stationdto.getStationId();
 		this.stationName = stationdto.getStationName();
-		if(stationdto.getBusList()!=null) {
+		if (stationdto.getBusList() != null) {
 			this.busList = stationdto.getBusList().stream().map(b -> new Bus(b)).collect(Collectors.toList());
 		}
-			
-		
 	}
 
 	public Station(Integer stationId) {
@@ -105,6 +77,31 @@ public class Station {
 
 	public void setBusList(List<Bus> busList) {
 		this.busList = busList;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((stationId == null) ? 0 : stationId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Station other = (Station) obj;
+		if (stationId == null) {
+			if (other.stationId != null)
+				return false;
+		} else if (!stationId.equals(other.stationId))
+			return false;
+		return true;
 	}
 
 	@Override

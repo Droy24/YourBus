@@ -42,7 +42,7 @@ public class BusService {
 		return busdtolist;
 	}
 
-	public BusDTO get(Integer id) {
+	public BusDTO get(Long id) {
 		System.out.println("Account get");
 		Optional<Bus> bus = busrepository.findById(id);
 		if (bus.isPresent()) {
@@ -51,7 +51,7 @@ public class BusService {
 		return null;
 	}
 
-	public String delete(Integer id) {
+	public String delete(Long id) {
 		System.out.println("Account delete");
 		busrepository.deleteById(id);
 		return "Succesful deletion";

@@ -33,7 +33,6 @@ public class Ticket {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer ticketId;
 
-	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinTable(name = "ticket_passenger")
 	private List<User> passengers; // map
@@ -59,7 +58,7 @@ public class Ticket {
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Transaction trans;
-
+	
 	public Ticket() {
 	}
 

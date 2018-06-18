@@ -1,6 +1,5 @@
 package com.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.Entity.Bus;
+import com.Entity.Route;
 import com.Entity.Station;
 import com.Repository.BusRepository;
+import com.Repository.RouteRepository;
 import com.Repository.StationRepository;
 import com.Wrapper.StationDTO;
 
@@ -19,6 +20,9 @@ public class StationService {
 
 	@Autowired
 	private StationRepository stationRepository;
+
+	@Autowired
+	private RouteRepository routeRepository;
 
 	@Autowired
 	BusRepository busRepository;
@@ -33,11 +37,10 @@ public class StationService {
 		return "successfully added";
 	}
 
-	public List<StationDTO> getAll() 
-	{
+	public List<StationDTO> getAll() {
 		System.out.println("Station get all");
 		List<Station> stationlist = stationRepository.findAll();
-		List<StationDTO> dtolist = stationlist.stream().map(s->new StationDTO(s)).collect(Collectors.toList());
+		List<StationDTO> dtolist = stationlist.stream().map(s -> new StationDTO(s)).collect(Collectors.toList());
 		return dtolist;
 	}
 
@@ -51,6 +54,19 @@ public class StationService {
 
 	public String delete(Integer id) {
 		System.out.println("Station delete");
+		Optional<Station> st = stationRepository.findById(id);
+		if (!st.isPresent())
+			return "Id does not exists";
+		Station station = st.get();
+		List<Route> routes = routeRepository.findAll();
+		if (routes != null) {
+			for (Route r : routes) {
+				if (r.getStops().contains(station)) {
+					r.getStops().remove(station);
+				}
+			}
+			routeRepository.saveAll(routes);
+		}
 		stationRepository.deleteById(id);
 		return "Succesful deletion";
 	}
@@ -58,15 +74,26 @@ public class StationService {
 	public String delete(List<StationDTO> acc) {
 		System.out.println("Station delete all");
 		List<Station> stationlist = stationRepository.findAll();
-		if(stationlist.isEmpty())return " No entry in database.";
-		List<Station> deletelist= acc.stream().map(s->new Station(s)).collect(Collectors.toList());
-		stationRepository.deleteAll(deletelist);
+		if (stationlist.isEmpty())
+			return " No entry in database.";
+		List<Station> deletelist = acc.stream().map(s -> new Station(s)).collect(Collectors.toList());
+
+		for (Station s : deletelist) {
+			List<Route> routes = routeRepository.findAll();
+			if (routes != null) {
+				for (Route r : routes) {
+					if (r.getStops().contains(s)) {
+						r.getStops().remove(s);
+					}
+				}
+				routeRepository.saveAll(routes);
+			}
+			stationRepository.deleteById(s.getStationId());
+		}
 		return "Multiple deletion successful";
 	}
-
 	public String findBus(int source, int destination) {
 		System.out.println("====Source===" + source);
-
 		Optional<Station> startPoint = stationRepository.findById(source);
 		if (startPoint.isPresent()) {
 			Optional<Station> endPoint = stationRepository.findById(destination);
@@ -84,24 +111,25 @@ public class StationService {
 				// dt.getPlateName());
 				// return dt.getStops().stream();
 				// }).forEach(System.out::println);
-
 				// List<Bus> buses = busRepository.findBusStops(source,destination);
 
-				Station start= startPoint.get();
-				Station end= endPoint.get();
-//				List<Bus> busses= start.getBusList().stream().map(s->s.getRoute()).collect(Collectors.toList()).stream().
-//						filter(st->st.getStops().contains(end)).collect(Collectors.toList()).
-				List<Bus> buses =allbus.stream()
-						.filter(s->s.getRoute().getStops().contains(start)&& s.getRoute().getStops().contains(end))
+				Station start = startPoint.get();
+				Station end = endPoint.get();
+				// List<Bus> busses=
+				// start.getBusList().stream().map(s->s.getRoute()).collect(Collectors.toList()).stream().
+				// filter(st->st.getStops().contains(end)).collect(Collectors.toList()).
+				List<Bus> buses = allbus.stream()
+						.filter(s -> s.getRoute().getStops().contains(start) && s.getRoute().getStops().contains(end))
 						.collect(Collectors.toList());
-				
-				if(buses==null)return "Not found";
+
+				if (buses == null)
+					return "Not found";
 				System.out.println(buses.toString());
-				
+
 				/*
-				  List<Bus> buses = busess.stream().filter( dt ->
-				  dt.getStops().contains(startPoint.get()) &&
-				  dt.getStops().contains(endPoint.get())) .collect(Collectors.toList());
+				 * List<Bus> buses = busess.stream().filter( dt ->
+				 * dt.getStops().contains(startPoint.get()) &&
+				 * dt.getStops().contains(endPoint.get())) .collect(Collectors.toList());
 				 */
 
 				/*
