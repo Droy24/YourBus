@@ -17,7 +17,7 @@ private Integer bookingId;
 	
 	private BusDTO BusId;
 	
-	private User user;
+//	private User user;
 	
 	private List<SeatDTO> seat;
 	
@@ -34,6 +34,19 @@ private Integer bookingId;
 	public BookingDTO(Booking booking) {
 		this.bookingId = booking.getBookingId();
 		if(booking.getBus()!=null)
+		//this.BusId = new BusDTO(booking.getBus());
+		/*if(booking.getUser()!=null)
+		this.user = booking.getUser();*/
+		this.seat = booking.getSeat().stream().map(s->new SeatDTO(s)).collect(Collectors.toList());
+		if(booking.getFrom()!=null)
+		this.from = new StationDTO(booking.getFrom());
+		if(booking.getDestination()!=null)
+		this.destination = new StationDTO(booking.getDestination());
+		this.fare = booking.getFare();
+		this.dateOfJourney = booking.getDateOfJourney();
+	}/*public BookingDTO(Booking booking,String ss) {
+		this.bookingId = booking.getBookingId();
+		if(booking.getBus()!=null)
 		this.BusId = new BusDTO(booking.getBus());
 		if(booking.getUser()!=null)
 		this.user = booking.getUser();
@@ -45,7 +58,7 @@ private Integer bookingId;
 		this.fare = booking.getFare();
 		this.dateOfJourney = booking.getDateOfJourney();
 	}
-
+*/
 	public Integer getBookingId() {
 		return bookingId;
 	}
@@ -62,13 +75,13 @@ private Integer bookingId;
 		BusId = busId;
 	}
 
-	public User getUser() {
+	/*public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
-	}
+	}*/
 
 	public List<SeatDTO> getSeat() {
 		return seat;

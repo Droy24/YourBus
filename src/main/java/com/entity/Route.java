@@ -32,7 +32,7 @@ public class Route {
 	
 	private String destination;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval=true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name="Route_stations")
 	private List<Station> stops= new ArrayList<>();
 
@@ -42,7 +42,9 @@ public class Route {
 	
 	public Route(RouteDTO routeDto) {
 		this.routeId=routeDto.getRouteId();
+		
 		this.source=routeDto.getSource();
+		
 		this.destination=routeDto.getDestination();
 		this.distance=routeDto.getDistance();
 		if(routeDto.getStops()!=null) 

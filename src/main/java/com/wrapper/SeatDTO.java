@@ -1,5 +1,8 @@
 package com.wrapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.entity.Seat;
 
 public class SeatDTO {
@@ -14,6 +17,8 @@ public class SeatDTO {
 
 	private boolean armyquota;
 
+	private List<BookingDTO> bookingdto;
+	
 	private String type; // single lower ,single upper, double lower, double upper ,sitting
 
 //	private BusDTO bus;
@@ -27,9 +32,12 @@ public class SeatDTO {
 		this.physicalquota=seat.isPhysicalquota();
 		this.armyquota=seat.isArmyquota();
 		this.type=seat.getType();
+		if(seat.getBooking()!=null)
+			this.bookingdto=seat.getBooking().stream().map(BookingDTO::new).collect(Collectors.toList());
 //		this.bus=new BusDTO (seat.getBus());
+		
 	}
-
+	
 	public Long getSeatid() {
 		return seatid;
 	}
@@ -76,6 +84,14 @@ public class SeatDTO {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public List<BookingDTO> getBookingdto() {
+		return bookingdto;
+	}
+
+	public void setBookingdto(List<BookingDTO> bookingdto) {
+		this.bookingdto = bookingdto;
 	}
 /*
 	public BusDTO getBus() {

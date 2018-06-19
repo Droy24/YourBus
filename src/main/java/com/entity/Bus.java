@@ -1,9 +1,9 @@
 package com.entity;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,7 +27,7 @@ import com.wrapper.BusDTO;
 
 @Entity
 @Table(name = "Bus")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "busId", scope = Bus.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "busId", scope = Bus.class)
 public class Bus {
 
 	@Id
@@ -42,12 +43,12 @@ public class Bus {
 	@Column(name = "totalseats")
 	private int totalSeats;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE }, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
 	@JoinTable
 	@JsonIgnore
-	private List<Seat> seat;
+	private List<Seat> seat = new ArrayList<>();
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval = true)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
 	@JsonIgnore
 	private Route route;
 
@@ -60,11 +61,11 @@ public class Bus {
 	@Column(name = "busType")
 	private String busType;
 
-	public Bus() {}
+	public Bus() {
+	}
 
-	public Bus(BusDTO busdto) 
-	{
-		this.busId = busdto.getBusId();
+	public Bus(BusDTO busdto) {
+//		this.busId = busdto.getBusId();
 		this.busType = busdto.getBusType();
 		this.totalSeats = busdto.getSeats();
 		this.seatsbooked = busdto.getSeatsbooked();
@@ -77,25 +78,24 @@ public class Bus {
 		this.plateName = busdto.getPlateName();
 		if (busdto.getRoute() != null)
 			this.route = new Route(busdto.getRoute());
-		if (busdto.getSeat() != null) {
-			this.seat = busdto.getSeat().stream().map(s -> new Seat(s)).collect(Collectors.toList());
+		if (busdto.getSeat() != null && !busdto.getSeat().isEmpty()) {
+			this.seat = busdto.getSeat().stream().map(Seat::new).collect(Collectors.toList());
+		} else {
+			System.out.println("in bus seat constructor");
+			this.seat = createSeats(this.totalSeats);
+			System.out.println("seat created " + seat.size());
 		}
-		  else { System.out.println("in bus seat constructor");
-		  this.seat=createSeats(this.totalSeats);
-		  System.out.println("seat created "+seat.size() ); }	 
 	}
 
-	public static List<Seat> createSeats(int n)
-	  {
-		  List<Seat> seats= new ArrayList<>(); 
-		  for(int i=0;i<n;i++) 
-		  { 
-			  Seat seat = new Seat(); 
-			  seats.add(seat);
-		  } 
-		  return seats; 
-	  }
-	 
+	public static List<Seat> createSeats(int n) {
+		List<Seat> seats = new ArrayList<>();
+		for (int i = 0; i < n; i++) {
+			Seat seat = new Seat();
+			seats.add(seat);
+		}
+		return seats;
+	}
+
 	public Bus(Long busId, String plateName, String busType) {
 		this.busId = busId;
 		this.plateName = plateName;

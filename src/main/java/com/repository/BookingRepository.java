@@ -12,6 +12,5 @@ import com.entity.Bus;
 public interface BookingRepository extends JpaRepository<Booking, Integer>{
 
 	List<Booking> findByBus(Bus bus);
-	
 
 }

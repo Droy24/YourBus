@@ -3,6 +3,7 @@ package com.entity;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,30 +31,28 @@ public class Booking {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer bookingId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
 	@JsonIgnore
 	private Bus bus;
-
-	@ManyToOne(fetch = FetchType.LAZY)
+/*
+	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
 	@JoinColumn(name = "userid", nullable = true) // change nullable to false
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private User user;
 
-	@ManyToMany
+*/
+	@ManyToMany(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
 	@JoinTable(name = "seat_booking")
 	@JsonIgnore
 	private List<Seat> seat;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
 	@JoinTable(name = "Source_booking")
 	@JoinColumn(name = "stationId", nullable = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Station from;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
 	@JoinTable(name = "Destination_booking")
 	@JoinColumn(name = "stationId", nullable = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
@@ -71,7 +70,7 @@ public class Booking {
 			int fare, LocalDate dateOfjourney) {
 		this.bookingId = bookingId;
 		this.bus = busId;
-		this.user = user;
+	//	this.user = user;
 		this.seat = seat;
 		this.from = from;
 		this.destination = destination;
@@ -82,12 +81,21 @@ public class Booking {
 	public Booking(BookingDTO bookingDTO) {
 		this.bookingId = bookingDTO.getBookingId();
 		this.bus = new Bus(bookingDTO.getBusId());
-		this.user = bookingDTO.getUser();
+	//	this.user = bookingDTO.getUser();
 		this.seat = bookingDTO.getSeat().stream().map(s -> new Seat(s)).collect(Collectors.toList());
 		this.from = new Station(bookingDTO.getFrom());
 		this.destination = new Station(bookingDTO.getDestination());
 		this.fare = bookingDTO.getFare();
 		this.dateOfJourney = bookingDTO.getDateOfJourney();
+	}
+	
+	
+	public Booking(Bus bus,Station from,Station destination,List<Seat> seat) {
+	this.bus=bus;
+	this.from=from;
+	this.destination=destination;
+	if(!seat.isEmpty()) this.seat=seat;
+	
 	}
 
 	public Integer getBookingId() {
@@ -97,7 +105,7 @@ public class Booking {
 	public void setBookingId(Integer bookingId) {
 		this.bookingId = bookingId;
 	}
-
+/*
 	public User getUser() {
 		return user;
 	}
@@ -106,7 +114,7 @@ public class Booking {
 		this.user = user;
 	}
 
-	public List<Seat> getSeat() {
+*/	public List<Seat> getSeat() {
 		return seat;
 	}
 
