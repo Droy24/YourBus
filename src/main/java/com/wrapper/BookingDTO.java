@@ -1,64 +1,59 @@
 package com.wrapper;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
 
 import com.entity.Booking;
-import com.entity.Bus;
-import com.entity.Seat;
-import com.entity.Station;
-import com.entity.User;
 
 public class BookingDTO {
-private Integer bookingId;
-	
-	private BusDTO BusId;
-	
-//	private User user;
-	
+	private Integer bookingId;
+
+	private BusDTO busId;
+
+	// private User user;
+
 	private List<SeatDTO> seat;
-	
+
 	private StationDTO from;
-	
+
 	private StationDTO destination;
-	
+
 	private int fare;
-	
+
 	private LocalDate dateOfJourney;
 
-	public BookingDTO() {}
-	
+	public BookingDTO() {
+	}
+
 	public BookingDTO(Booking booking) {
 		this.bookingId = booking.getBookingId();
-		if(booking.getBus()!=null)
-		//this.BusId = new BusDTO(booking.getBus());
-		/*if(booking.getUser()!=null)
-		this.user = booking.getUser();*/
-		this.seat = booking.getSeat().stream().map(s->new SeatDTO(s)).collect(Collectors.toList());
-		if(booking.getFrom()!=null)
-		this.from = new StationDTO(booking.getFrom());
-		if(booking.getDestination()!=null)
-		this.destination = new StationDTO(booking.getDestination());
-		this.fare = booking.getFare();
-		this.dateOfJourney = booking.getDateOfJourney();
-	}/*public BookingDTO(Booking booking,String ss) {
-		this.bookingId = booking.getBookingId();
-		if(booking.getBus()!=null)
-		this.BusId = new BusDTO(booking.getBus());
-		if(booking.getUser()!=null)
-		this.user = booking.getUser();
-		this.seat = booking.getSeat().stream().map(s->new SeatDTO(s)).collect(Collectors.toList());
-		if(booking.getFrom()!=null)
-		this.from = new StationDTO(booking.getFrom());
-		if(booking.getDestination()!=null)
-		this.destination = new StationDTO(booking.getDestination());
+		if (booking.getBus() != null)
+			// this.BusId = new BusDTO(booking.getBus());
+			/*
+			 * if(booking.getUser()!=null) this.user = booking.getUser();
+			 */
+			this.seat = booking.getSeat().stream().map(s -> new SeatDTO(s)).collect(Collectors.toList());
+		if (booking.getFrom() != null)
+			this.from = new StationDTO(booking.getFrom());
+		if (booking.getDestination() != null)
+			this.destination = new StationDTO(booking.getDestination());
 		this.fare = booking.getFare();
 		this.dateOfJourney = booking.getDateOfJourney();
 	}
-*/
+
+	/*
+	 * public BookingDTO(Booking booking,String ss) { this.bookingId =
+	 * booking.getBookingId(); if(booking.getBus()!=null) this.BusId = new
+	 * BusDTO(booking.getBus()); if(booking.getUser()!=null) this.user =
+	 * booking.getUser(); this.seat = booking.getSeat().stream().map(s->new
+	 * SeatDTO(s)).collect(Collectors.toList()); if(booking.getFrom()!=null)
+	 * this.from = new StationDTO(booking.getFrom());
+	 * if(booking.getDestination()!=null) this.destination = new
+	 * StationDTO(booking.getDestination()); this.fare = booking.getFare();
+	 * this.dateOfJourney = booking.getDateOfJourney(); }
+	 */
 	public Integer getBookingId() {
 		return bookingId;
 	}
@@ -68,20 +63,18 @@ private Integer bookingId;
 	}
 
 	public BusDTO getBusId() {
-		return BusId;
+		return busId;
 	}
 
 	public void setBusId(BusDTO busId) {
-		BusId = busId;
+		busId = busId;
 	}
 
-	/*public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}*/
+	/*
+	 * public User getUser() { return user; }
+	 * 
+	 * public void setUser(User user) { this.user = user; }
+	 */
 
 	public List<SeatDTO> getSeat() {
 		return seat;

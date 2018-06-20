@@ -19,7 +19,7 @@ import com.wrapper.SeatDTO;
 
 @Entity
 @Table(name = "seat")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "seatid", scope = Bus.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "seatid", scope = Seat.class)
 public class Seat {
 
 	@Id
@@ -41,8 +41,7 @@ public class Seat {
 	@Column(name = "type")
 	private String type; // single lower ,single upper, double lower, double upper ,sitting
 
-	@ManyToMany(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
-	private List<Booking> booking;
+	
 	/*
 	 * @ManyToOne(fetch = FetchType.LAZY)
 	 * 
@@ -58,8 +57,8 @@ public class Seat {
 
 	public Seat(SeatDTO seatdto) {
 		this.armyquota = seatdto.isArmyquota();
-		if (seatdto.getBookingdto() != null)
-			this.booking = seatdto.getBookingdto().stream().map(Booking::new).collect(Collectors.toList());
+//		if (seatdto.getBookingdto() != null)
+//			this.booking = seatdto.getBookingdto().stream().map(Booking::new).collect(Collectors.toList());
 		this.ladiesquota = seatdto.isLadiesquota();
 		this.oldquota = seatdto.isOldquota();
 		this.physicalquota = seatdto.isPhysicalquota();
@@ -127,13 +126,7 @@ public class Seat {
 		this.type = type;
 	}
 
-	public List<Booking> getBooking() {
-		return booking;
-	}
-
-	public void setBooking(List<Booking> booking) {
-		this.booking = booking;
-	}
+	
 	/*
 	 * public Bus getBus() { return bus; }
 	 * 

@@ -32,7 +32,7 @@ public class Route {
 	
 	private String destination;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(name="Route_stations")
 	private List<Station> stops= new ArrayList<>();
 

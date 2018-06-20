@@ -32,8 +32,8 @@ public class SeatDTO {
 		this.physicalquota=seat.isPhysicalquota();
 		this.armyquota=seat.isArmyquota();
 		this.type=seat.getType();
-		if(seat.getBooking()!=null)
-			this.bookingdto=seat.getBooking().stream().map(BookingDTO::new).collect(Collectors.toList());
+//		if(seat.getBooking()!=null)
+//			this.bookingdto=seat.getBooking().stream().map(s->new Booking()).collect(Collectors.toList());
 //		this.bus=new BusDTO (seat.getBus());
 		
 	}

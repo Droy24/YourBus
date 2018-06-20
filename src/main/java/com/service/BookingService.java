@@ -43,30 +43,27 @@ public class BookingService {
 	}
 
 	public String add(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId, Integer userId) {
-		System.out.println("in customer booking ");
-		if (busService.availableSeats(busId, sourceId, destinationId) > numberOfSeats) {
+		int available=busService.availableSeats(busId, sourceId, destinationId);
+		System.out.println("available seats : " +available);
+		if ( available> numberOfSeats) {
 			List<Seat> totalSeat = busRepository.findById(busId).get().getSeat();
 			if (totalSeat.isEmpty())
 				return "no seats in db";
-			totalSeat.stream().forEach(s -> System.out.println(s.getSeatid()));
+			
 
 			List<Seat> seatsBooked = busService.bookedSeats(busId, sourceId, destinationId);
-			System.out.println("Booked Seats");
 			
-			seatsBooked.stream().forEach(s -> System.out.println(s.getSeatid()));
-			System.out.println("after booked stream");
-//			 if(seatsBooked.isEmpty())return "No booked Seats";
+			seatsBooked.stream().forEach(s -> System.out.println("booked seats with id in booking service :"+s.getSeatid()));
 			List<Seat> newSeatBooking = new ArrayList<>();
-			System.out.println("after newbooking arraylist");
 			int i = 0;
 
 			for (Seat seat : totalSeat) 
-			{System.out.println("in loop "+seat.getSeatid());
-				if (!seatsBooked.isEmpty()) 
+			{
+				if (!seatsBooked.isEmpty() && seatsBooked !=null) 
 				{
 					if (!seatsBooked.contains(seat)) 
 					{
-						System.out.println("in seatsbooked contains");
+						
 						newSeatBooking.add(seat);
 						i++;
 						if (i == numberOfSeats)
@@ -80,20 +77,15 @@ public class BookingService {
 					if (i == numberOfSeats)
 						break;
 				}
-				
 			}
-			System.out.println("before booking");
-//			Optional<User> u = userRepository.findById(userId);
-//			User user = u.get();
+
 			Booking booking = new Booking(
 					busRepository.findById(busId).get(),
 					stationRepository.findById(sourceId).get(),
 					stationRepository.findById(destinationId).get(),		
 					newSeatBooking);
 			
-			System.out.println("booking class created");
 			bookingRepository.save(booking);
-			System.out.println("booking done");
 
 			return "Booking Confirmed " + booking.getBookingId()+" From: "+booking.getFrom()+" To: "+booking.getDestination();
 		}

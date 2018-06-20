@@ -105,46 +105,43 @@ public class BusService {
 	public int availableSeats(Long busId, Integer sourceId, Integer destinationId) {
 		List<Seat> totalSeatsList = busRepository.findById(busId).get().getSeat();
 		List<Seat> bookedList = bookedSeats(busId, sourceId, destinationId);
+		System.out.println("============ booked list size==============="+bookedList.size());
 		return totalSeatsList.size() - bookedList.size();
 	}
 
 	public List<Seat> bookedSeats(Long busId, Integer sourceId, Integer destinationId) {
 		if (busRepository.findById(busId).isPresent()) {
-			System.out.println("in bookedSeats method 1");
+			
 			List<Seat> totalSeatsList = busRepository.findById(busId).get().getSeat();
 			List<Seat> seatBookedList = new ArrayList<>();
-			System.out.println("in bookedSeats method 2");
+			
 			if (sourceId != destinationId) {
-				System.out.println("in bookedSeats method 3");
+				
 				Optional<Bus> bus = busRepository.findById(busId);
 				if (bus.isPresent()) {
-					System.out.println("in bookedSeats method 4");
+					
 					int totalSeats = bus.get().getTotalSeats();
 					List<Station> stations = bus.get().getRoute().getStops();
-					
+					if(stations.isEmpty())System.out.println("no stations in route 1");
+					stations.stream().forEach(s->System.out.println("station : "+s.getStationId()));
 					Station source = stationRepository.findById(sourceId).get();
 					Station destination = stationRepository.findById(destinationId).get();
 					int flag = 0;
-					System.out.println("in bookedSeats method 5");
 					// Get the route we want to check bus availability on
 					List<Station> route = new ArrayList<>();
 					for (Station s : stations) {
-						System.out.println("staion loop added****");
-						if (s.getStationId().equals(source) || flag == 1) {
-							flag = 1;
-						
+						//System.out.println("staion loop added****");
+						if (s.getStationId().equals(source.getStationId()) || flag == 1) {
+							flag = 1;	
 							route.add(s);
 						}
-						if (s.equals(destination)) {
+						if (s.getStationId().equals(destination.getStationId())) {
 							flag = 0;
 						}
 					}
-					System.out.println("in bookedSeats method 6=== "+route.size());
-					
 					// Count bookedSeats in the route
 					int bookedSeats = 0;
 					List<Booking> booklist = bookingRepository.findByBus(bus.get());
-//					booklist.stream().forEach(s->System.out.println(s.getBookingId()));
 					if(booklist.isEmpty())System.out.println("list is empty");
 					
 					for (Booking book : booklist) {
@@ -162,11 +159,9 @@ public class BusService {
 							bookedSeats+=book.getSeat().size();
 						}}
 						
-//						System.out.println("====Booked Seats list"+route.size()+"=====");
 					}
 					System.out.println("in bookedSeats method 7");
 					seatBookedList.stream().forEach(s->System.out.println(" "+s.getSeatid()));
-					
 					return seatBookedList;
 
 				} else {
@@ -177,6 +172,10 @@ public class BusService {
 		}
 		return null;
 	}
+	
+	
+	
+	
 	// public List<Bus> getinbetween(int source, int destination) {
 	// // TODO Auto-generated method stub
 	// // List<Bus> lst=new LinkedList<>();

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wrapper.BookingDTO;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "bookingId", scope = Bus.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "bookingId", scope = Booking.class)
 public class Booking {
 
 	@Id
@@ -41,9 +41,11 @@ public class Booking {
 	private User user;
 
 */
-	@ManyToMany(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
-	@JoinTable(name = "seat_booking")
-	@JsonIgnore
+	
+	@ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
+    @JoinTable(name = "seat_booking", 
+             joinColumns = {@JoinColumn(name = "bookingId") }, 
+             inverseJoinColumns = { @JoinColumn(name = "seatid") })
 	private List<Seat> seat;
 
 	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
@@ -88,7 +90,6 @@ public class Booking {
 		this.fare = bookingDTO.getFare();
 		this.dateOfJourney = bookingDTO.getDateOfJourney();
 	}
-	
 	
 	public Booking(Bus bus,Station from,Station destination,List<Seat> seat) {
 	this.bus=bus;
