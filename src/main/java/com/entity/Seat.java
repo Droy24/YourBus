@@ -41,7 +41,6 @@ public class Seat {
 	@Column(name = "type")
 	private String type; // single lower ,single upper, double lower, double upper ,sitting
 
-	
 	/*
 	 * @ManyToOne(fetch = FetchType.LAZY)
 	 * 
