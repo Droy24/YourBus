@@ -23,38 +23,36 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-//	@GetMapping(name = "/test")
-//	public void test() {
-//		System.out.println("checking");
-//	}
+	// @GetMapping(name = "/test")
+	// public void test() {
+	// System.out.println("checking");
+	// }
 
 	@PostMapping
 	@ResponseBody
-	public String newacc(@RequestBody List<User> acc) {
+	public String newacc(@RequestBody List<User> acc) 
+	{
 		System.out.println("in user post");
 		return userService.add(acc);
-
 	}
 
 	@PostMapping("/login")
 	@ResponseBody
-	public String login(@RequestBody List<User> details )
-	{
+	public String login(@RequestBody List<User> details) {
 		return userService.login(details);
 	}
-	
+
 	@GetMapping(value = "/{id}")
 	public Optional<User> getid(@PathVariable(value = "id") Integer id) {
 		return userService.get(id);
 	}
 
-	@PostMapping(value="/forgot")
+	@PostMapping(value = "/forgot")
 	@ResponseBody
-	public String forgot(@RequestBody User user)
-	{
+	public String forgot(@RequestBody User user) {
 		return userService.forgot(user);
 	}
-	
+
 	@GetMapping()
 	public List<User> getAll() {
 		return userService.getAll();

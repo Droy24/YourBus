@@ -10,11 +10,11 @@ import com.entity.Booking;
 public class BookingDTO {
 	private Integer bookingId;
 
-	private BusDTO busId;
+	private BusDTO busDTO;
 
-	// private User user;
+	private UserDTO userDTO;
 
-	private List<SeatDTO> seat;
+	private List<SeatDTO> seatDTO;
 
 	private StationDTO from;
 
@@ -24,23 +24,35 @@ public class BookingDTO {
 
 	private LocalDate dateOfJourney;
 
+	private int numberOfSeats;
+
+	public int getNumberOfSeats() {
+		return numberOfSeats;
+	}
+
+	public void setNumberOfSeats(int numberOfSeats) {
+		this.numberOfSeats = numberOfSeats;
+	}
+
 	public BookingDTO() {
 	}
 
 	public BookingDTO(Booking booking) {
 		this.bookingId = booking.getBookingId();
 		if (booking.getBus() != null)
-			// this.BusId = new BusDTO(booking.getBus());
-			/*
-			 * if(booking.getUser()!=null) this.user = booking.getUser();
-			 */
-			this.seat = booking.getSeat().stream().map(s -> new SeatDTO(s)).collect(Collectors.toList());
+			this.busDTO = new BusDTO(booking.getBus());
+		if (booking.getUser() != null)
+			this.userDTO = new UserDTO(booking.getUser());
+		if (booking.getSeat() != null)
+			this.seatDTO = booking.getSeat().stream().map(s -> new SeatDTO(s)).collect(Collectors.toList());
 		if (booking.getFrom() != null)
 			this.from = new StationDTO(booking.getFrom());
 		if (booking.getDestination() != null)
 			this.destination = new StationDTO(booking.getDestination());
 		this.fare = booking.getFare();
 		this.dateOfJourney = booking.getDateOfJourney();
+		if (this.seatDTO != null)
+			this.numberOfSeats = booking.getSeat().size();
 	}
 
 	/*
@@ -62,26 +74,28 @@ public class BookingDTO {
 		this.bookingId = bookingId;
 	}
 
-	public BusDTO getBusId() {
-		return busId;
+	public BusDTO getBusDTO() {
+		return busDTO;
 	}
 
-	public void setBusId(BusDTO busId) {
-		busId = busId;
+	public void setBusDTO(BusDTO busDTO) {
+		this.busDTO = busDTO;
 	}
 
-	/*
-	 * public User getUser() { return user; }
-	 * 
-	 * public void setUser(User user) { this.user = user; }
-	 */
-
-	public List<SeatDTO> getSeat() {
-		return seat;
+	public UserDTO getUserDTO() {
+		return userDTO;
 	}
 
-	public void setSeat(List<SeatDTO> seat) {
-		this.seat = seat;
+	public void setUserDTO(UserDTO userDTO) {
+		this.userDTO = userDTO;
+	}
+
+	public List<SeatDTO> getSeatDTO() {
+		return seatDTO;
+	}
+
+	public void setSeatDTO(List<SeatDTO> seatDTO) {
+		this.seatDTO = seatDTO;
 	}
 
 	public StationDTO getFrom() {

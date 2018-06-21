@@ -27,7 +27,8 @@ import com.wrapper.BusDTO;
 
 @Entity
 @Table(name = "Bus")
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "busId", scope = Bus.class)
+// @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class,
+// property = "busId", scope = Bus.class)
 public class Bus {
 
 	@Id
@@ -43,7 +44,7 @@ public class Bus {
 	@Column(name = "totalseats")
 	private int totalSeats;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable
 	@JsonIgnore
 	private List<Seat> seat = new ArrayList<>();
@@ -65,9 +66,10 @@ public class Bus {
 	}
 
 	public Bus(BusDTO busdto) {
-//		this.busId = busdto.getBusId();
+//		if(busId!=null)
+		 this.busId = busdto.getBusId();
 		this.busType = busdto.getBusType();
-		this.totalSeats = busdto.getSeats();
+		this.totalSeats = busdto.getTotalSeats();
 		this.seatsbooked = busdto.getSeatsbooked();
 		if (busdto.getDailyStartTime() != null) {
 			this.dailyStartTime = busdto.getDailyStartTime();
@@ -96,14 +98,15 @@ public class Bus {
 		return seats;
 	}
 
-	public Bus(Long busId, String plateName, String busType) {
+	public Bus(Long busId, String plateName, String busType,int seatsBooked) {
 		this.busId = busId;
 		this.plateName = plateName;
 		this.busType = busType;
+		this.seatsbooked=seatsBooked;
 	}
 
 	public int getSeatsbooked() {
-		return this.seat.size();
+		return this.seatsbooked;
 	}
 
 	public Route getRoute() {
@@ -140,14 +143,6 @@ public class Bus {
 
 	public void setSeatsbooked(int seatsbooked) {
 		this.seatsbooked = seatsbooked;
-	}
-
-	public int getSeats() {
-		return totalSeats;
-	}
-
-	public void setSeats(int seats) {
-		this.totalSeats = seats;
 	}
 
 	public Long getBusId() {

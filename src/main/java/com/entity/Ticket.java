@@ -58,7 +58,7 @@ public class Ticket {
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Transaction trans;
-	
+
 	public Ticket() {
 	}
 
@@ -73,7 +73,7 @@ public class Ticket {
 			Transaction trans) {
 
 		this.ticketId = ticketId;
-		//this.passengers = passengers;
+		// this.passengers = passengers;
 		this.fare = fare;
 		this.source = source;
 		this.destination = destination;
@@ -91,11 +91,10 @@ public class Ticket {
 		this.busId = busId;
 		this.trans = trans;
 	}
-/*
-	public int numberofseats() {
-		return passengers.size();
-	}
-*/
+
+	/*
+	 * public int numberofseats() { return passengers.size(); }
+	 */
 	public Integer getTicketId() {
 		return ticketId;
 	}
@@ -103,15 +102,13 @@ public class Ticket {
 	public void setTicketId(Integer ticketId) {
 		this.ticketId = ticketId;
 	}
-/*
-	public List<String> getPassengers() {
-		return passengers;
-	}
 
-	public void setPassengers(List<String> passengers) {
-		this.passengers = passengers;
-	}
-*/
+	/*
+	 * public List<String> getPassengers() { return passengers; }
+	 * 
+	 * public void setPassengers(List<String> passengers) { this.passengers =
+	 * passengers; }
+	 */
 	public int getFare() {
 		return fare;
 	}

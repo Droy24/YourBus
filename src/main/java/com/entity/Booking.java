@@ -31,33 +31,29 @@ public class Booking {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer bookingId;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JsonIgnore
 	private Bus bus;
-/*
-	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "userid", nullable = true) // change nullable to false
 	@JsonIgnore
 	private User user;
 
-*/
-	
-	@ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
-    @JoinTable(name = "seat_booking", 
-             joinColumns = {@JoinColumn(name = "bookingId") }, 
-             inverseJoinColumns = { @JoinColumn(name = "seatid") })
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "seat_booking", joinColumns = { @JoinColumn(name = "bookingId") }, inverseJoinColumns = {
+	@JoinColumn(name = "seatid") })
 	private List<Seat> seat;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(name = "Source_booking")
 	@JoinColumn(name = "stationId", nullable = true)
 	@JsonIgnore
 	private Station from;
 
-	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.MERGE)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(name = "Destination_booking")
 	@JoinColumn(name = "stationId", nullable = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Station destination;
 
@@ -65,14 +61,13 @@ public class Booking {
 
 	private LocalDate dateOfJourney;
 
-	public Booking() {
-	}
+	public Booking() {}
 
 	public Booking(Integer bookingId, Bus busId, User user, List<Seat> seat, Station from, Station destination,
 			int fare, LocalDate dateOfjourney) {
 		this.bookingId = bookingId;
 		this.bus = busId;
-	//	this.user = user;
+		this.user = user;
 		this.seat = seat;
 		this.from = from;
 		this.destination = destination;
@@ -82,21 +77,29 @@ public class Booking {
 
 	public Booking(BookingDTO bookingDTO) {
 		this.bookingId = bookingDTO.getBookingId();
-		this.bus = new Bus(bookingDTO.getBusId());
-	//	this.user = bookingDTO.getUser();
-		this.seat = bookingDTO.getSeat().stream().map(s -> new Seat(s)).collect(Collectors.toList());
+		
+		if(bookingDTO.getBusDTO()!=null)
+		this.bus = new Bus(bookingDTO.getBusDTO());
+		
+		if(bookingDTO.getUserDTO()!=null)
+		this.user = new User(bookingDTO.getUserDTO());
+		if(bookingDTO.getSeatDTO()!=null)
+		this.seat = bookingDTO.getSeatDTO().stream().map(s -> new Seat(s)).collect(Collectors.toList());
+		
 		this.from = new Station(bookingDTO.getFrom());
 		this.destination = new Station(bookingDTO.getDestination());
 		this.fare = bookingDTO.getFare();
 		this.dateOfJourney = bookingDTO.getDateOfJourney();
 	}
-	
-	public Booking(Bus bus,Station from,Station destination,List<Seat> seat) {
-	this.bus=bus;
-	this.from=from;
-	this.destination=destination;
-	if(!seat.isEmpty()) this.seat=seat;
-	
+
+	public Booking(Bus bus, Station from, Station destination, List<Seat> seat) {
+		this.bus = bus;
+		this.from = from;
+		this.destination = destination;
+		if (!seat.isEmpty()) {
+			this.seat = seat;
+		}
+
 	}
 
 	public Integer getBookingId() {
@@ -106,16 +109,13 @@ public class Booking {
 	public void setBookingId(Integer bookingId) {
 		this.bookingId = bookingId;
 	}
-/*
-	public User getUser() {
-		return user;
-	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-*/	public List<Seat> getSeat() {
+	/*
+	 * public User getUser() { return user; }
+	 * 
+	 * public void setUser(User user) { this.user = user; }
+	 * 
+	 */ public List<Seat> getSeat() {
 		return seat;
 	}
 
@@ -161,5 +161,13 @@ public class Booking {
 
 	public void setFare(int fare) {
 		this.fare = fare;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

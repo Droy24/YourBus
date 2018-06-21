@@ -7,26 +7,27 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="passenger")
+@Table(name = "passenger")
 public class Passenger {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long passengerid;
-	
+
 	private int fare;
 
 	private String passengerName;
-	
-	public Passenger() {}
-	
+
+	public Passenger() {
+	}
+
 	public Passenger(Long passengerid, int fare, String passengerName) {
-		
+
 		this.passengerid = passengerid;
 		this.fare = fare;
 		this.passengerName = passengerName;
 	}
-	
+
 	public String getPassengerName() {
 		return passengerName;
 	}
@@ -50,13 +51,12 @@ public class Passenger {
 	public void setFare(int fare) {
 		this.fare = fare;
 	}
-	
+
 	/*
-	private Bus bus;
-		
-	public void calculateFare() {
-		String type=bus.getBustype();
-		if(type.equalsIgnoreCase("ac")||type.equalsIgnoreCase("a.c."))this.fare=20*route.getDistance(source ,destination);
-	}
-	*/
+	 * private Bus bus;
+	 * 
+	 * public void calculateFare() { String type=bus.getBustype();
+	 * if(type.equalsIgnoreCase("ac")||type.equalsIgnoreCase("a.c."))this.fare=20*
+	 * route.getDistance(source ,destination); }
+	 */
 }

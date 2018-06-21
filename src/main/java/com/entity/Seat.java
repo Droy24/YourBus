@@ -55,9 +55,11 @@ public class Seat {
 	}
 
 	public Seat(SeatDTO seatdto) {
+		this.seatid = seatdto.getSeatid();
 		this.armyquota = seatdto.isArmyquota();
-//		if (seatdto.getBookingdto() != null)
-//			this.booking = seatdto.getBookingdto().stream().map(Booking::new).collect(Collectors.toList());
+		// if (seatdto.getBookingdto() != null)
+		// this.booking =
+		// seatdto.getBookingdto().stream().map(Booking::new).collect(Collectors.toList());
 		this.ladiesquota = seatdto.isLadiesquota();
 		this.oldquota = seatdto.isOldquota();
 		this.physicalquota = seatdto.isPhysicalquota();
@@ -125,7 +127,6 @@ public class Seat {
 		this.type = type;
 	}
 
-	
 	/*
 	 * public Bus getBus() { return bus; }
 	 * 

@@ -9,13 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.entity.Booking;
+import com.entity.Bus;
 import com.entity.Seat;
+import com.entity.Station;
 import com.entity.User;
 import com.repository.BookingRepository;
 import com.repository.BusRepository;
 import com.repository.StationRepository;
 import com.repository.UserRepository;
 import com.wrapper.BookingDTO;
+import com.wrapper.BusDTO;
 
 @Service
 public class BookingService {
@@ -42,36 +45,36 @@ public class BookingService {
 			return new BookingDTO(bookingRepository.findById(id).get());
 	}
 
-	public String add(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId, Integer userId) {
-		int available=busService.availableSeats(busId, sourceId, destinationId);
-		System.out.println("available seats : " +available);
-		if ( available> numberOfSeats) {
-			List<Seat> totalSeat = busRepository.findById(busId).get().getSeat();
+	public String add(BookingDTO bookingDTO) 
+{
+		int numberOfSeats = bookingDTO.getNumberOfSeats();
+		Bus bus = new Bus(bookingDTO.getBusDTO());
+		Station source = new Station(bookingDTO.getFrom());
+		Station destination = new Station(bookingDTO.getDestination());
+		User user= new User(bookingDTO.getUserDTO()); 
+		return add(bus.getBusId(),numberOfSeats,source.getStationId(),destination.getStationId(),user.getUserid());
+	}
+
+	public String add(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId, Integer userId) 
+	{
+		Bus bus = busRepository.findById(busId).get();
+		int available = busService.availableSeats(busId, sourceId, destinationId);
+		if (available > numberOfSeats) {
+			List<Seat> totalSeat = bus.getSeat();
 			if (totalSeat.isEmpty())
 				return "no seats in db";
-			
-
 			List<Seat> seatsBooked = busService.bookedSeats(busId, sourceId, destinationId);
-			
-			seatsBooked.stream().forEach(s -> System.out.println("booked seats with id in booking service :"+s.getSeatid()));
 			List<Seat> newSeatBooking = new ArrayList<>();
 			int i = 0;
-
-			for (Seat seat : totalSeat) 
-			{
-				if (!seatsBooked.isEmpty() && seatsBooked !=null) 
-				{
-					if (!seatsBooked.contains(seat)) 
-					{
-						
+			for (Seat seat : totalSeat) {
+				if (!seatsBooked.isEmpty() && seatsBooked != null) {
+					if (!seatsBooked.contains(seat)) {
 						newSeatBooking.add(seat);
 						i++;
 						if (i == numberOfSeats)
 							break;
 					}
-				}
-				else 
-				{
+				} else {
 					newSeatBooking.add(seat);
 					i++;
 					if (i == numberOfSeats)
@@ -79,56 +82,83 @@ public class BookingService {
 				}
 			}
 
-			Booking booking = new Booking(
-					busRepository.findById(busId).get(),
-					stationRepository.findById(sourceId).get(),
-					stationRepository.findById(destinationId).get(),		
-					newSeatBooking);
-			
+			Booking booking = new Booking(bus, stationRepository.findById(sourceId).get(),
+					stationRepository.findById(destinationId).get(), newSeatBooking);
 			bookingRepository.save(booking);
+			Long id = bus.getBusId();
 
-			return "Booking Confirmed " + booking.getBookingId()+" From: "+booking.getFrom()+" To: "+booking.getDestination();
+			int x = bus.getSeatsbooked() + numberOfSeats;
+			bus.setSeatsbooked(x);
+
+			bus.setPlateName("Thousand Sunny");
+			busRepository.save(bus);
+
+			return "Booking Confirmed " + booking.getBookingId() + " From: " + booking.getFrom().getStationname()
+					+ " To: " + booking.getDestination().getStationname();
 		}
 		return "Bus Seat unavailable";
 	}
 
-	public List<Seat> getSeats(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId) {
-
+	public List<Seat> getSeats(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId)
+ {
 		return null;
 	}
 
-	public List<BookingDTO> getAllBookings() {
+	public List<BookingDTO> getAllBookings()
+ {
 		return bookingRepository.findAll().stream().map(m -> new BookingDTO(m)).collect(Collectors.toList());
 	}
 
-	public String saveOrUpdateBooking(BookingDTO booking) {
+	public String saveOrUpdateBooking(BookingDTO booking) 
+{
 		System.out.println("new booking");
 		Booking book = new Booking(booking);
-
 		bookingRepository.save(book);
 		return "Successful booking";
 	}
 
-	public String saveOrUpdateBooking(Integer id, BookingDTO booking) {
+	public String saveOrUpdateBooking(Integer id, BookingDTO booking)      		//Remove ID
+ {
 		System.out.println("new/update single booking");
-		Optional<Booking> singlebook = bookingRepository.findById(id);
-		if (singlebook == null)
-			return "Entry not found";
-
-		booking.setBookingId(id);
-
-		bookingRepository.save(new Booking(booking));
-		return "Successful booking";
+		id=booking.getBookingId();
+		if (id == null)
+		{
+			bookingRepository.save(new Booking(booking));
+			return "Booking added";
+		}
+		else 
+		{
+			Booking bk = new Booking(booking);
+			Booking book = bookingRepository.findById(id).get();
+			book.setBus(bk.getBus());
+			book.setDateOfJourney(bk.getDateOfJourney());
+			book.setDestination(bk.getDestination());
+			book.setFare(bk.getFare());
+			book.setFrom(bk.getFrom());
+			book.setSeat(bk.getSeat());
+			book.setUser(bk.getUser());
+			bookingRepository.save(book);
+			return "booking updated";
+		}
 	}
 
-	public String delete(List<BookingDTO> acc) {
+	public String delete(List<BookingDTO> acc) 
+{
 		List<Booking> booking = acc.stream().map(s -> new Booking(s)).collect(Collectors.toList());
 		bookingRepository.deleteAll(booking);
 		return "Multiple Successful deletion";
 	}
 
-	public String deleteById(Integer bookingId) {
+	public String deleteById(Integer bookingId) 
+{
+		Booking booking = bookingRepository.findById(bookingId).get();
+		int size = booking.getSeat().size();
+		Bus bus = booking.getBus();
+
+		bus.setSeatsbooked(bus.getSeatsbooked() - size);
+		busService.saveAndUpdateBus(new BusDTO(bus));
 		bookingRepository.deleteById(bookingId);
+
 		return "Successful deletion";
 	}
 }

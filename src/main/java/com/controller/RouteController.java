@@ -18,7 +18,7 @@ import com.wrapper.RouteDTO;
 @RestController
 @RequestMapping("/route")
 public class RouteController {
-	
+
 	@Autowired
 	private RouteService routeService;
 
@@ -32,7 +32,7 @@ public class RouteController {
 	public RouteDTO getid(@PathVariable(value = "id") Integer id) {
 		return routeService.get(id);
 	}
-	
+
 	@GetMapping()
 	public List<RouteDTO> getAll() {
 		return routeService.getAll();

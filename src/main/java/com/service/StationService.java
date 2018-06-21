@@ -92,57 +92,24 @@ public class StationService {
 		}
 		return "Multiple deletion successful";
 	}
+
 	public List<Bus> findBus(int source, int destination) {
-		System.out.println("====Source===" + source);
 		Optional<Station> startPoint = stationRepository.findById(source);
 		if (startPoint.isPresent()) {
 			Optional<Station> endPoint = stationRepository.findById(destination);
 			if (endPoint.isPresent()) {
-
-				// if (startPoint.get().equals(endPoint.get())) {
-				// return "Source and Destination should not same.";
-				// }
-
-				System.out.println("Start Station Point " + startPoint.get() + " endPoint => " + endPoint.get());
+				if (startPoint.get().equals(endPoint.get())) {
+					return null;
+				}
 				List<Bus> allbus = busRepository.findAll();
-
-				// busess.stream().flatMap(dt -> {
-				// System.out.println("Bus Id=> " + dt.getBusId() + " Bus Name => " +
-				// dt.getPlateName());
-				// return dt.getStops().stream();
-				// }).forEach(System.out::println);
-				// List<Bus> buses = busRepository.findBusStops(source,destination);
-
 				Station start = startPoint.get();
 				Station end = endPoint.get();
-				// List<Bus> busses=
-				// start.getBusList().stream().map(s->s.getRoute()).collect(Collectors.toList()).stream().
-				// filter(st->st.getStops().contains(end)).collect(Collectors.toList()).
 				List<Bus> buses = allbus.stream()
 						.filter(s -> s.getRoute().getStops().contains(start) && s.getRoute().getStops().contains(end))
 						.collect(Collectors.toList());
-
-				if (buses == null)
-					{
+				if (buses == null) {
 					return null;
-					}
-				System.out.println(buses.toString());
-
-				/*
-				 * List<Bus> buses = busess.stream().filter( dt ->
-				 * dt.getStops().contains(startPoint.get()) &&
-				 * dt.getStops().contains(endPoint.get())) .collect(Collectors.toList());
-				 */
-
-				/*
-				 * List<Bus> buses=busess.stream().filter(r->r.getRoute())
-				 * 
-				 * 
-				 * if (buses.isEmpty()) return "No Buses in between"; buses.forEach(dt -> {
-				 * System.out.println("Bus Id=> " + dt.getBusId() + " Bus Name => " +
-				 * dt.getPlateName()); });
-				 */
-
+				}
 				return buses;
 			}
 			System.out.println("Destination not found");
@@ -150,6 +117,5 @@ public class StationService {
 		}
 		System.out.println("Source is not found");
 		return null;
-				
 	}
 }

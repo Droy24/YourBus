@@ -27,11 +27,17 @@ public class BusController {
 	// System.out.println("checking");
 	// }
 
-	@PostMapping
+	@PostMapping("/many")
 	@ResponseBody
 	public String newacc(@RequestBody List<BusDTO> acc) {
 		System.out.println("in controller");
 		return busService.add(acc);
+	}
+
+	@PostMapping
+	@ResponseBody
+	public String saveAndUpdateBus(@RequestBody BusDTO busDTO) {
+		return busService.saveAndUpdateBus(busDTO);
 	}
 
 	@GetMapping(value = "/{id}")
@@ -46,7 +52,8 @@ public class BusController {
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseBody
-	public String deleteById(@PathVariable(value = "id") Long id) {
+	public String deleteById(@PathVariable(value = "id") Long id) 
+	{
 		return busService.delete(id);
 	}
 
@@ -55,7 +62,10 @@ public class BusController {
 	public String deleteByBody(@RequestBody List<BusDTO> bus) {
 		return busService.delete(bus);
 	}
-	
-	
-	
+
+	@GetMapping("/{busId}/{from}/{to}")
+	public int availableSeats(@PathVariable("busId")Long busId,@PathVariable("from")Integer sourceId,@PathVariable("to")Integer destinationId )
+	{
+		return availableSeats(busId,sourceId,destinationId);
+	}
 }

@@ -1,19 +1,17 @@
 package com.entity;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.joda.time.LocalDate;
+
+import com.wrapper.UserDTO;
 
 @Entity
 @Table(name = "User")
@@ -43,33 +41,52 @@ public class User {
 
 	@Column(name = "answer")
 	private String answer;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	private Account wallet;
 
 	@Column(name = "mobile")
-	String mobile;
+	private Long mobile;
 
 	@Column(name = "address")
-	String address;
+	private String address;
 
-	@Column(name = "insurance")
-	int insurance; // boolean type
+	@Column(name = "insuranceId")
+	private int insuranceId; // boolean type
 
 	@Column(name = "date")
-	private Date birthday;
+	private LocalDate birthday;
 
 	@Column(name = "age")
 	private int age;
 
-//	@OneToMany
-	//private Booking ticket;
-	
+	// @OneToMany
+	// private Booking ticket;
+
 	public User() {
 	}
 
+	public User(UserDTO userDTO) {
+		this.userid = userDTO.getUserid();
+		this.address = userDTO.getAddress();
+		this.age = userDTO.getAge();
+		this.answer = userDTO.getAnswer();
+		this.birthday = userDTO.getBirthday();
+		this.email = userDTO.getEmail();
+		this.insuranceId = userDTO.getInsuranceId();
+		this.mobile = userDTO.getMobile();
+		this.name = userDTO.getName();
+		this.password = userDTO.getPassword();
+		this.question = userDTO.getQuestion();
+		this.type = userDTO.getType();
+		this.username = userDTO.getUsername();
+
+		if (userDTO.getWallet() != null)
+			this.wallet = new Account(userDTO.getWallet());
+	}
+
 	public User(String name, String email, String username, String password, String question, String answer,
-			String mobile, String address, int insurance, Date birthday, int age) {
+			Long mobile, String address, int insurance, LocalDate birthday, int age) {
 
 		// this.userid = userid;
 		this.name = name;
@@ -80,7 +97,7 @@ public class User {
 		this.answer = answer;
 		this.mobile = mobile;
 		this.address = address;
-		this.insurance = insurance;
+		this.insuranceId = insurance;
 		this.birthday = birthday;
 		this.age = age;
 	}
@@ -101,7 +118,6 @@ public class User {
 		this.answer = answer;
 	}
 
-	
 	public Integer getUserid() {
 		return userid;
 	}
@@ -134,7 +150,6 @@ public class User {
 		this.username = username;
 	}
 
-
 	public String getPassword() {
 		return password;
 	}
@@ -150,7 +165,7 @@ public class User {
 	public void setWallet(Account wallet) {
 		this.wallet = wallet;
 	}
-	
+
 	// public List<Ticket> getTicket() {
 	// return ticket;
 	// }
@@ -159,11 +174,11 @@ public class User {
 	// this.ticket = ticket;
 	// }
 
-	public String getMobile() {
+	public Long getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(String mobile) {
+	public void setMobile(Long mobile) {
 		this.mobile = mobile;
 	}
 
@@ -176,18 +191,18 @@ public class User {
 	}
 
 	public int getInsurance() {
-		return insurance;
+		return insuranceId;
 	}
 
-	public void setInsurance(int insurance) {
-		this.insurance = insurance;
+	public void setInsurance(int insuranceId) {
+		this.insuranceId = insuranceId;
 	}
 
-	public Date getBirthday() {
+	public LocalDate getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
 	}
 
@@ -198,21 +213,26 @@ public class User {
 	public void setAge(int age) {
 		this.age = age;
 	}
-/*	
-	public Booking getTicket() {
-		return ticket;
-	}
 
-	public void setTicket(Booking ticket) {
-		this.ticket = ticket;
-	}
-*/
+	/*
+	 * public Booking getTicket() { return ticket; }
+	 * 
+	 * public void setTicket(Booking ticket) { this.ticket = ticket; }
+	 */
 	public String getType() {
 		return type;
 	}
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public int getInsuranceId() {
+		return insuranceId;
+	}
+
+	public void setInsuranceId(int insuranceId) {
+		this.insuranceId = insuranceId;
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.entity;
 
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,39 +19,40 @@ public class Transaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int transactionId;
-	
+
 	@Column(name = "bankname")
 	private String bank;
 
-	@OneToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Account accId; // maps
 
-	@OneToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private User uId;
 
 	@Column(name = "transactiondate")
 	private LocalDate dateOfTransaction;
 
-	public Transaction() {}
-	
-	public Transaction(String bank)
-	{
-		System.out.println("one arg");
-		this.bank=bank;
+	public Transaction() {
 	}
+
+	public Transaction(String bank) {
+		System.out.println("one arg");
+		this.bank = bank;
+	}
+
 	public Transaction(String bank, User uid) {
-	
-//		this.transactionId = transactionid;
+
+		// this.transactionId = transactionid;
 		this();
 		System.out.println("2 arg");
 		this.bank = bank;
 		this.uId = uid;
 	}
-	
+
 	public Transaction(String bank, Account accid, User uid) {
-		
-//		this.transactionId = transactionid;
-		this(bank,uid);
+
+		// this.transactionId = transactionid;
+		this(bank, uid);
 		this.bank = bank;
 		System.out.println("3 arg");
 		this.accId = accid;

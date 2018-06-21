@@ -23,36 +23,36 @@ import com.wrapper.RouteDTO;
 @Table(name = "route")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "routeId")
 public class Route {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer routeId;
-	
+
 	private String source;
-	
+
 	private String destination;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	@JoinTable(name="Route_stations")
-	private List<Station> stops= new ArrayList<>();
+	@JoinTable(name = "Route_stations")
+	private List<Station> stops = new ArrayList<>();
 
 	private LinkedList<Integer> distance;
-	
-	public Route() {}
-	
+
+	public Route() {
+	}
+
 	public Route(RouteDTO routeDto) {
-		this.routeId=routeDto.getRouteId();
-		
-		this.source=routeDto.getSource();
-		
-		this.destination=routeDto.getDestination();
-		this.distance=routeDto.getDistance();
-		if(routeDto.getStops()!=null) 
-		{
-			this.stops=routeDto.getStops().stream().map(s->new Station(s)).collect(Collectors.toList());
+		this.routeId = routeDto.getRouteId();
+
+		this.source = routeDto.getSource();
+
+		this.destination = routeDto.getDestination();
+		this.distance = routeDto.getDistance();
+		if (routeDto.getStops() != null) {
+			this.stops = routeDto.getStops().stream().map(s -> new Station(s)).collect(Collectors.toList());
 		}
 	}
-	
+
 	public Route(Integer routeId, String source, String destination, List<Station> stops,
 			LinkedList<Integer> distance) {
 		this.routeId = routeId;
@@ -61,28 +61,27 @@ public class Route {
 		this.stops = stops;
 		this.distance = distance;
 	}
-	
+
 	public void addStationInList(Station addst) {
 		stops.add(addst);
 	}
-	
+
 	public void addAfterStation(Station station1, Station addStation) {
 		int index = this.stops.indexOf(station1);
 		this.stops.add(index, addStation);
 	}
 
-	public int getTotalDistance(Station start,Station end) {
-		int startIndex=stops.indexOf(start);
-		int endIndex=stops.indexOf(end);
-		int totalDistance=0;
+	public int getTotalDistance(Station start, Station end) {
+		int startIndex = stops.indexOf(start);
+		int endIndex = stops.indexOf(end);
+		int totalDistance = 0;
 		int i;
-		for(i=startIndex;i<=endIndex;i++)
-		{
-			totalDistance+= distance.get(i);
+		for (i = startIndex; i <= endIndex; i++) {
+			totalDistance += distance.get(i);
 		}
 		return totalDistance;
 	}
-	
+
 	public LinkedList<Integer> getDistance() {
 		return distance;
 	}
@@ -90,7 +89,7 @@ public class Route {
 	public void setDistance(LinkedList<Integer> distance) {
 		this.distance = distance;
 	}
-	
+
 	public Integer getRouteId() {
 		return routeId;
 	}

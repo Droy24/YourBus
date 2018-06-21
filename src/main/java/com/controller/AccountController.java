@@ -19,42 +19,42 @@ import com.service.AccountService;
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {
-	
+
 	@Autowired
 	private AccountService accountService;
-	
-//	@GetMapping(name = "/test")
-//	public void test() {
-//		System.out.println("checking");
-//	}
+
+	// @GetMapping(name = "/test")
+	// public void test() {
+	// System.out.println("checking");
+	// }
 
 	@PostMapping
 	@ResponseBody
 	public String newacc(@RequestBody List<Account> acc) {
 		return accountService.add(acc);
-		
+
 	}
 
-	@GetMapping( value= "/{id}")
-	public Optional<Account> getid(@PathVariable(value = "id")Integer id) {
+	@GetMapping(value = "/{id}")
+	public Optional<Account> getid(@PathVariable(value = "id") Integer id) {
 		return accountService.get(id);
 	}
-	
+
 	@GetMapping()
 	public List<Account> getAll() {
 		return accountService.getAll();
 	}
-		
-	@DeleteMapping( value= "/{id}")
+
+	@DeleteMapping(value = "/{id}")
 	@ResponseBody
-	public String deleteById(@PathVariable(value = "id")Integer id) {
+	public String deleteById(@PathVariable(value = "id") Integer id) {
 		return accountService.delete(id);
 	}
-	
+
 	@DeleteMapping()
 	@ResponseBody
 	public String deleteByBody(@RequestBody List<Account> acc) {
 		return accountService.delete(acc);
 	}
-	
+
 }

@@ -16,7 +16,7 @@ public class BusDTO {
 	private Long busId;
 	private String plateName;
 	private int seatsbooked;
-	private int seats;
+	private int totalSeats;
 	private String busType;
 	private DateTime dailyStartTime;
 	private DateTime dailyStopTime;
@@ -24,13 +24,14 @@ public class BusDTO {
 	private RouteDTO route;
 	private List<SeatDTO> seat;
 
-	public BusDTO() {}
+	public BusDTO() {
+	}
 
 	public BusDTO(Bus bus) {
 		this.busId = bus.getBusId();
 		this.plateName = bus.getPlateName();
 		this.seatsbooked = bus.getSeatsbooked();
-		this.seats = bus.getSeats();
+		this.totalSeats = bus.getTotalSeats();
 		this.busType = bus.getBustype();
 		this.dailyStartTime = bus.getDailyStartTime();
 		this.dailyStopTime = bus.getDailyStopTime();
@@ -88,12 +89,12 @@ public class BusDTO {
 		this.seatsbooked = seatsbooked;
 	}
 
-	public int getSeats() {
-		return seats;
+	public int getTotalSeats() {
+		return totalSeats;
 	}
 
-	public void setSeats(int seats) {
-		this.seats = seats;
+	public void setTotalSeats(int totalSeats) {
+		this.totalSeats = totalSeats;
 	}
 
 	public String getBusType() {

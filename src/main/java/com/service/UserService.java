@@ -35,48 +35,55 @@ public class UserService {
 
 	public String delete(Integer id) {
 		System.out.println("User delete");
-		Optional<User> user= userRepository.findById(id);
-		if(user==null)return "Id does not exist";
+		Optional<User> user = userRepository.findById(id);
+		if (user == null)
+			return "Id does not exist";
 		userRepository.deleteById(id);
 		return "Succesful deletion";
 	}
 
 	public String delete(List<User> acc) {
 		System.out.println("Service delete all");
-		int count=0;
-		int notfound=0;
-		for(User user: acc)
-			{
-			Optional<User> u=userRepository.findById(user.getUserid());
-			if(!u.isPresent()) {System.out.println("Entry not found"); notfound++;}
-			else count++;
-			}
-		
+		int count = 0;
+		int notfound = 0;
+		for (User user : acc) {
+			Optional<User> u = userRepository.findById(user.getUserid());
+			if (!u.isPresent()) {
+				System.out.println("Entry not found");
+				notfound++;
+			} else
+				count++;
+		}
+
 		userRepository.deleteAll(acc);
-		return "deletion successful for :"+count+" Not succesful for: "+notfound;
+		return "deletion successful for :" + count + " Not succesful for: " + notfound;
 	}
 
 	public String login(List<User> details) {
-		String username="";
-		String password="";
-		for(User u: details ) {
-		username=u.getUsername();
-		password= u.getPassword();
+		String username = "";
+		String password = "";
+		for (User u : details) {
+			username = u.getUsername();
+			password = u.getPassword();
 		}
-		List<User> us=userRepository.findByUsernameAndPassword(username,password);
-		if(us.isEmpty())return "Not Found";
-		else return "Login success";
+		List<User> us = userRepository.findByUsernameAndPassword(username, password);
+		if (us.isEmpty())
+			return "Not Found";
+		else
+			return "Login success";
 
 	}
 
 	public String forgot(User user) {
-		
+
 		String username = user.getUsername();
-		String question=user.getQuestion();
-		String answer= user.getPassword();
-		
-		List<User> us=userRepository.findByUsernameAndQuestionAndAnswer(username,question,answer);
-		if(us.isEmpty())return "Wrong entry";
-		else return us.toString();
+		String question = user.getQuestion();
+		String answer = user.getPassword();
+
+		List<User> us = userRepository.findByUsernameAndQuestionAndAnswer(username, question, answer);
+		if (us.isEmpty())
+			return "Wrong entry";
+		else
+			return us.toString();
 	}
 }

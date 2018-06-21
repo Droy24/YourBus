@@ -14,7 +14,7 @@ public class RouteDTO {
 
 	private String destination;
 
-	private List<StationDTO> stops ;
+	private List<StationDTO> stops;
 
 	private LinkedList<Integer> distance;
 
@@ -25,8 +25,9 @@ public class RouteDTO {
 		this.routeId = route.getRouteId();
 		this.source = route.getSource();
 		this.destination = route.getDestination();
-		if(route.getStops()!=null) {
-		this.stops = route.getStops().stream().map(s -> new StationDTO(s)).collect(Collectors.toList());}
+		if (route.getStops() != null) {
+			this.stops = route.getStops().stream().map(s -> new StationDTO(s)).collect(Collectors.toList());
+		}
 		this.distance = route.getDistance();
 	}
 

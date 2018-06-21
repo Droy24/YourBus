@@ -18,26 +18,28 @@ public class SeatDTO {
 	private boolean armyquota;
 
 	private List<BookingDTO> bookingdto;
-	
+
 	private String type; // single lower ,single upper, double lower, double upper ,sitting
 
-//	private BusDTO bus;
-	
-	public SeatDTO() {}
+	// private BusDTO bus;
+
+	public SeatDTO() {
+	}
 
 	public SeatDTO(Seat seat) {
-		this.seatid=seat.getSeatid();
-		this.oldquota=seat.isOldquota();
-		this.ladiesquota=seat.isLadiesquota();
-		this.physicalquota=seat.isPhysicalquota();
-		this.armyquota=seat.isArmyquota();
-		this.type=seat.getType();
-//		if(seat.getBooking()!=null)
-//			this.bookingdto=seat.getBooking().stream().map(s->new Booking()).collect(Collectors.toList());
-//		this.bus=new BusDTO (seat.getBus());
-		
+		this.seatid = seat.getSeatid();
+		this.oldquota = seat.isOldquota();
+		this.ladiesquota = seat.isLadiesquota();
+		this.physicalquota = seat.isPhysicalquota();
+		this.armyquota = seat.isArmyquota();
+		this.type = seat.getType();
+		// if(seat.getBooking()!=null)
+		// this.bookingdto=seat.getBooking().stream().map(s->new
+		// Booking()).collect(Collectors.toList());
+		// this.bus=new BusDTO (seat.getBus());
+
 	}
-	
+
 	public Long getSeatid() {
 		return seatid;
 	}
@@ -85,7 +87,7 @@ public class SeatDTO {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	public List<BookingDTO> getBookingdto() {
 		return bookingdto;
 	}
@@ -93,14 +95,10 @@ public class SeatDTO {
 	public void setBookingdto(List<BookingDTO> bookingdto) {
 		this.bookingdto = bookingdto;
 	}
-/*
-	public BusDTO getBus() {
-		return bus;
-	}
-
-	public void setBus(BusDTO bus) {
-		this.bus = bus;
-	}
-*/
+	/*
+	 * public BusDTO getBus() { return bus; }
+	 * 
+	 * public void setBus(BusDTO bus) { this.bus = bus; }
+	 */
 
 }

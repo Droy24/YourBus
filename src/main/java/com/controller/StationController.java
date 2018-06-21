@@ -25,33 +25,31 @@ public class StationController {
 	@Autowired
 	private StationService stationService;
 
-//	@GetMapping(name = "/test")
-//	public void test() {
-//		System.out.println("checking");
-//	}
+	// @GetMapping(name = "/test")
+	// public void test() {
+	// System.out.println("checking");
+	// }
 
 	@PostMapping
 	@ResponseBody
 	public String newacc(@RequestBody List<StationDTO> acc) {
-		
 		return stationService.add(acc);
-
 	}
 
-	@GetMapping(value="/available/{id1}/{id2}")
-	public List<Bus> getavailable(@PathVariable(value = "id1") int source,@PathVariable(value = "id2") int destination)
-	{
-		return stationService.findBus(source, destination);
+	@GetMapping(value = "/available/{id1}/{id2}")
+	public List<Bus> getavailable(@PathVariable(value = "id1") int source,
+	@PathVariable(value = "id2") int destination) {
+	return stationService.findBus(source, destination);
 	}
-	
+
 	@GetMapping(value = "/{id}")
 	public StationDTO getid(@PathVariable(value = "id") Integer id) {
-		return stationService.get(id);
+	return stationService.get(id);
 	}
 
 	@GetMapping()
 	public List<StationDTO> getAll() {
-		return stationService.getAll();
+	return stationService.getAll();
 	}
 
 	@DeleteMapping(value = "/{id}")

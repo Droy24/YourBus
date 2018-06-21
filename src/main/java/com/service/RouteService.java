@@ -19,22 +19,21 @@ public class RouteService {
 
 	@Autowired
 	private RouteRepository routeRepository;
-	
+
 	@Autowired
 	private BusRepository busRepository;
 
-	@Autowired 
+	@Autowired
 	private StationRepository stationrepository;
-	
+
 	public String add(RouteDTO acc) {
 		System.out.println("in Route add");
-//		for (RouteDTO a : acc) {
-			Route route = new Route(acc);
-			if(route!=null)
-			{
+		// for (RouteDTO a : acc) {
+		Route route = new Route(acc);
+		if (route != null) {
 			routeRepository.save(route);
-			}
-		
+		}
+
 		return "save completed";
 	}
 
@@ -58,15 +57,13 @@ public class RouteService {
 
 	public String delete(Integer id) {
 		System.out.println("Route delete");
-		Optional<Route> route =routeRepository.findById(id);
-		if(route.isPresent())
-		{
-			Route rt= route.get();
+		Optional<Route> route = routeRepository.findById(id);
+		if (route.isPresent()) {
+			Route rt = route.get();
 			List<Bus> bus = busRepository.findAll();
-			if(bus!=null)
-			{
-				for(Bus bs:bus) {
-					if(bs.getRoute().equals(rt))
+			if (bus != null) {
+				for (Bus bs : bus) {
+					if (bs.getRoute().equals(rt))
 						bs.setRoute(null);
 				}
 				busRepository.saveAll(bus);
@@ -77,8 +74,7 @@ public class RouteService {
 		return "No entry";
 	}
 
-	public String delete(List<RouteDTO> acc) 
-	{
+	public String delete(List<RouteDTO> acc) {
 		System.out.println("Route delete all");
 		List<Route> routelist = new LinkedList<Route>();
 		for (RouteDTO route : acc)

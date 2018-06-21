@@ -21,40 +21,38 @@ public class SeatController {
 
 	@Autowired
 	private SeatService seatService;
-	
+
 	@GetMapping
 	public List<SeatDTO> getAllSeat() {
 		System.out.println("in seat get all");
 		return seatService.getAll();
 	}
-	
+
 	@GetMapping("/{id}")
 	public SeatDTO getSeat(@PathVariable Long id) {
 		return seatService.get(id);
 	}
-	
+
 	@PostMapping
 	@ResponseBody
-	public String addSeats(@RequestBody SeatDTO seat ) {
+	public String addSeats(@RequestBody SeatDTO seat) {
 		return seatService.add(seat);
 	}
-	
+
 	@PostMapping("/{id}")
 	@ResponseBody
-	public String addOrUpdateSeat(@PathVariable Long id,@RequestBody SeatDTO seat ) {
-		return seatService.addOrUpdateSeat(id,seat);
+	public String addOrUpdateSeat(@PathVariable Long id, @RequestBody SeatDTO seat) {
+		return seatService.addOrUpdateSeat(id, seat);
 	}
-	
-	@DeleteMapping(value="/{id}")
-	public String deleteSeatById(@PathVariable Long id)
-	{
+
+	@DeleteMapping(value = "/{id}")
+	public String deleteSeatById(@PathVariable Long id) {
 		return seatService.delete(id);
 	}
-	
+
 	@DeleteMapping
 	@ResponseBody
-	public String deleteSeats(@RequestBody List<SeatDTO> seatdto)
-	{
+	public String deleteSeats(@RequestBody List<SeatDTO> seatdto) {
 		return seatService.delete(seatdto);
 	}
 }

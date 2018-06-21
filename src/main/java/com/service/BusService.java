@@ -35,23 +35,21 @@ public class BusService {
 	@Autowired
 	private StationRepository stationRepository;
 
-	@Autowired 
+	@Autowired
 	private StationService stationService;
-	
+
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public String add(List<BusDTO> dto) {
 		logger.info("To save and update Bus.");
 		System.out.println("in bus add");
-		List<StationDTO> stationList= new ArrayList<>();
+		List<StationDTO> stationList = new ArrayList<>();
 		for (BusDTO busdto : dto) {
-/*			int numberOfTotalSeats=busdto.getSeats();
-			for(int i=0;i<numberOfTotalSeats;i++) {
-				StationDTO st=new StationDTO();
-				stationList.add(st);
-			}
-			stationService.add(stationList);
-*/			busRepository.save(populateBus(busdto));
+			/*
+			 * int numberOfTotalSeats=busdto.getSeats(); for(int
+			 * i=0;i<numberOfTotalSeats;i++) { StationDTO st=new StationDTO();
+			 * stationList.add(st); } stationService.add(stationList);
+			 */ busRepository.save(populateBus(busdto));
 		}
 		return "save completed";
 	}
@@ -62,14 +60,14 @@ public class BusService {
 	}
 
 	public List<BusDTO> getAll() {
-		System.out.println("Account get all");
+		System.out.println("Bus get all");
 		List<Bus> bs = busRepository.findAll();
 		List<BusDTO> busdtolist = bs.stream().map(s -> new BusDTO(s)).collect(Collectors.toList());
 		return busdtolist;
 	}
 
 	public BusDTO get(Long id) {
-		System.out.println("Account get");
+		System.out.println("Bus get");
 		Optional<Bus> bus = busRepository.findById(id);
 		if (bus.isPresent()) {
 			return new BusDTO(bus.get());
@@ -105,77 +103,61 @@ public class BusService {
 	public int availableSeats(Long busId, Integer sourceId, Integer destinationId) {
 		List<Seat> totalSeatsList = busRepository.findById(busId).get().getSeat();
 		List<Seat> bookedList = bookedSeats(busId, sourceId, destinationId);
-		System.out.println("============ booked list size==============="+bookedList.size());
 		return totalSeatsList.size() - bookedList.size();
 	}
 
 	public List<Seat> bookedSeats(Long busId, Integer sourceId, Integer destinationId) {
-		if (busRepository.findById(busId).isPresent()) {
-			
-			List<Seat> totalSeatsList = busRepository.findById(busId).get().getSeat();
+		Optional<Bus> bus = busRepository.findById(busId);
+		if (bus.isPresent()) {
+
+			List<Seat> totalSeatsList = bus.get().getSeat();
 			List<Seat> seatBookedList = new ArrayList<>();
-			
+
 			if (sourceId != destinationId) {
-				
-				Optional<Bus> bus = busRepository.findById(busId);
-				if (bus.isPresent()) {
-					
-					int totalSeats = bus.get().getTotalSeats();
-					List<Station> stations = bus.get().getRoute().getStops();
-					if(stations.isEmpty())System.out.println("no stations in route 1");
-					stations.stream().forEach(s->System.out.println("station : "+s.getStationId()));
-					Station source = stationRepository.findById(sourceId).get();
-					Station destination = stationRepository.findById(destinationId).get();
-					int flag = 0;
-					// Get the route we want to check bus availability on
-					List<Station> route = new ArrayList<>();
-					for (Station s : stations) {
-						//System.out.println("staion loop added****");
-						if (s.getStationId().equals(source.getStationId()) || flag == 1) {
-							flag = 1;	
-							route.add(s);
-						}
-						if (s.getStationId().equals(destination.getStationId())) {
-							flag = 0;
-						}
+				int totalSeats = bus.get().getTotalSeats();
+				List<Station> stations = bus.get().getRoute().getStops();
+				if (stations.isEmpty())
+					System.out.println("no stations in route 1");
+				Station source = stationRepository.findById(sourceId).get();
+				Station destination = stationRepository.findById(destinationId).get();
+				int flag = 0;
+				List<Station> route = new ArrayList<>();
+				for (Station s : stations) {
+					if (s.getStationId().equals(source.getStationId()) || flag == 1) {
+						flag = 1;
+						route.add(s);
 					}
-					// Count bookedSeats in the route
-					int bookedSeats = 0;
-					List<Booking> booklist = bookingRepository.findByBus(bus.get());
-					if(booklist.isEmpty())System.out.println("list is empty");
-					
-					for (Booking book : booklist) {
-						System.out.println("inner bookedSeats"+book.getBookingId()+" "+book.getFrom() );
-						Station from = book.getFrom();
-						Station to = book.getDestination();
-						if(route.size()==2 &&route.contains(from)&& route.contains(to)) {
-							seatBookedList.addAll(book.getSeat());
-							bookedSeats+=book.getSeat().size();
-						}
-						else {
+					if (s.getStationId().equals(destination.getStationId())) {
+						flag = 0;
+					}
+				}
+				int bookedSeats = 0;
+				List<Booking> booklist = bookingRepository.findByBus(bus.get());
+
+				for (Booking book : booklist) {
+					Station from = book.getFrom();
+					Station to = book.getDestination();
+					if (route.size() == 2 && route.contains(from) && route.contains(to)) {
+						seatBookedList.addAll(book.getSeat());
+						bookedSeats += book.getSeat().size();
+					} else {
 						if ((route.contains(from) && !route.get(0).equals(from))
 								|| (route.contains(to) && !route.get(route.size() - 1).equals(to))) {
 							seatBookedList.addAll(book.getSeat());
-							bookedSeats+=book.getSeat().size();
-						}}
-						
+							bookedSeats += book.getSeat().size();
+						}
 					}
-					System.out.println("in bookedSeats method 7");
-					seatBookedList.stream().forEach(s->System.out.println(" "+s.getSeatid()));
-					return seatBookedList;
-
-				} else {
-					return null;
 				}
+				// System.out.println("in bookedSeats method 7");
+				seatBookedList.stream().forEach(s -> System.out.println(" " + s.getSeatid()));
+				return seatBookedList;
+
 			}
 			return null;
 		}
 		return null;
 	}
-	
-	
-	
-	
+
 	// public List<Bus> getinbetween(int source, int destination) {
 	// // TODO Auto-generated method stub
 	// // List<Bus> lst=new LinkedList<>();
@@ -188,7 +170,32 @@ public class BusService {
 
 	public String bookBus(Long busId, Integer sourceId, Integer destinationId, int numberOfSeats) {
 		String message = bookingService.add(busId, sourceId, destinationId, numberOfSeats, numberOfSeats);
-
 		return message;
+	}
+
+	public String saveAndUpdateBus(BusDTO busDTO) {
+		Bus b = new Bus(busDTO);
+		Optional<Bus> optionalBus = busRepository.findById(b.getBusId());
+		Bus bus = optionalBus.get();
+
+		if (b.getBusId() == null) {
+			busRepository.save(b);
+			return "new bus created";
+		} else {
+			bus.setBusType(b.getBusType());
+			bus.setDailyStartTime(b.getDailyStartTime());
+			bus.setDailyStopTime(b.getDailyStopTime());
+			bus.setPlateName(b.getPlateName());
+			if (b.getRoute() != null)
+				bus.setRoute(b.getRoute());
+			if (b.getSeat() != null)
+				bus.setSeat(b.getSeat());
+			bus.setSeatsbooked(b.getSeatsbooked());
+			bus.setTotalSeats(b.getTotalSeats());
+			bus.setType(b.getType());
+
+			busRepository.save(bus);
+			return "bus updated";
+		}
 	}
 }

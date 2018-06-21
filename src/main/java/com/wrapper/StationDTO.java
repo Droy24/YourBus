@@ -19,8 +19,9 @@ public class StationDTO {
 	public StationDTO(Station station) {
 		this.stationId = station.getStationId();
 		this.stationName = station.getStationname();
-		if(station.getBusList()!=null) {
-		this.busList = station.getBusList().stream().map(b -> new BusDTO(b)).collect(Collectors.toList());}
+		if (station.getBusList() != null) {
+			this.busList = station.getBusList().stream().map(b -> new BusDTO(b)).collect(Collectors.toList());
+		}
 	}
 
 	public StationDTO(Integer stationId, String stationName) {

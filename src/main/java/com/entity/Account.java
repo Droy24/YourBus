@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.wrapper.AccountDTO;
+
 @Entity
 @Table(name = "Account")
 public class Account {
@@ -19,6 +21,11 @@ public class Account {
 	private int money;
 
 	public Account() {
+	}
+	public Account(AccountDTO accountDTO) 
+	{
+		this.accountId=accountDTO.getAccountId();
+		this.money=accountDTO.getMoney();
 	}
 
 	public Account(int money) {

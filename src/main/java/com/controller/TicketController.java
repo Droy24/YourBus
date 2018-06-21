@@ -23,10 +23,10 @@ public class TicketController {
 	@Autowired
 	private TicketService ticketService;
 
-//	@GetMapping(name = "/test")
-//	public void test() {
-//		System.out.println("checking");
-//	}
+	// @GetMapping(name = "/test")
+	// public void test() {
+	// System.out.println("checking");
+	// }
 
 	@PostMapping
 	@ResponseBody
