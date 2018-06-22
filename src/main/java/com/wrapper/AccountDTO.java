@@ -1,10 +1,9 @@
 package com.wrapper;
 
 import com.entity.Account;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountDTO {
 
 	private int accountId;

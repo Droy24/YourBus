@@ -40,7 +40,8 @@ public class BookingController {
 	 * @return
 	 */
 	@GetMapping(value = "/{id}")
-	public BookingDTO getBooking(@PathVariable(value = "id") Integer id) {
+	public BookingDTO getBooking(@PathVariable(value = "id") Integer id) 
+	{
 		return bookingService.get(id);
 	}
 

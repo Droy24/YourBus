@@ -50,15 +50,13 @@ public class BookingDTO {
 		List<Seat> seat = booking.getSeat();
 		Station from = booking.getFrom();
 		Station destination = booking.getDestination();
-
 		this.bookingId = booking.getBookingId();
 		if (bus != null)
 			this.busDTO = new BusDTO(bus.getBusId(), bus.getPlateName());
 		if (user != null)
 			this.userDTO = new UserDTO(user.getUserid(), user.getName());
 		if (seat != null)
-			this.seatDTO = seat.stream().map(s -> new SeatDTO(s.getSeatid(), s.getSeatName()))
-					.collect(Collectors.toList());
+			this.seatDTO = seat.stream().map(s -> new SeatDTO(s.getSeatid(), s.getSeatName())).collect(Collectors.toList());
 		if (from != null)
 			this.from = new StationDTO(from.getStationId(), from.getStationname());
 		if (destination != null)

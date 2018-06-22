@@ -67,7 +67,6 @@ public class Seat {
 		this.physicalquota = seatdto.isPhysicalquota();
 		this.type = seatdto.getType();
 		this.seatName=seatdto.getSeatName();
-
 	}
 
 	public Seat(boolean oldquota, boolean ladiesquota, boolean physicalquota, boolean armyquota) {
