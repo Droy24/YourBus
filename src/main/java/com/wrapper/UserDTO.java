@@ -34,6 +34,8 @@ public class UserDTO {
 
 	private int age;
 	
+	public UserDTO() {}
+	
 	public UserDTO(User user) {
 		this.userid=user.getUserid();
 		this.name=user.getName();

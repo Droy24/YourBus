@@ -1,10 +1,12 @@
 package com.service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import com.entity.Booking;
 import com.entity.Bus;
 import com.entity.Seat;
 import com.entity.Station;
+import com.entity.User;
 import com.repository.BookingRepository;
 import com.repository.BusRepository;
 import com.repository.StationRepository;
@@ -100,28 +103,27 @@ public class BusService {
 		return "Multiple deletion successful";
 	}
 
-	public int availableSeats(Long busId, Integer sourceId, Integer destinationId) {
+	public int availableSeats(Long busId, Integer sourceId, Integer destinationId, LocalDate date) {
 		List<Seat> totalSeatsList = busRepository.findById(busId).get().getSeat();
-		List<Seat> bookedList = bookedSeats(busId, sourceId, destinationId);
+		List<Seat> bookedList = bookedSeats(busId, sourceId, destinationId, date);
 		return totalSeatsList.size() - bookedList.size();
 	}
 
-	public List<Seat> bookedSeats(Long busId, Integer sourceId, Integer destinationId) {
+	public List<Seat> bookedSeats(Long busId, Integer sourceId, Integer destinationId, LocalDate date) {
 		Optional<Bus> bus = busRepository.findById(busId);
 		if (bus.isPresent()) {
-
 			List<Seat> totalSeatsList = bus.get().getSeat();
 			List<Seat> seatBookedList = new ArrayList<>();
-
 			if (sourceId != destinationId) {
 				int totalSeats = bus.get().getTotalSeats();
 				List<Station> stations = bus.get().getRoute().getStops();
-				if (stations.isEmpty())
-					System.out.println("no stations in route 1");
 				Station source = stationRepository.findById(sourceId).get();
 				Station destination = stationRepository.findById(destinationId).get();
 				int flag = 0;
 				List<Station> route = new ArrayList<>();
+				/**
+				 * Create the route the bus will use while traveling in between the 2 stations
+				 */
 				for (Station s : stations) {
 					if (s.getStationId().equals(source.getStationId()) || flag == 1) {
 						flag = 1;
@@ -131,45 +133,54 @@ public class BusService {
 						flag = 0;
 					}
 				}
+				
+				/**
+				 * Create route of given bus betweent given stations
+				 */
+
 				int bookedSeats = 0;
 				List<Booking> booklist = bookingRepository.findByBus(bus.get());
-
+				/**
+				 * Create list of bookedSeats so that we do not book these seats again
+				 */
 				for (Booking book : booklist) {
 					Station from = book.getFrom();
 					Station to = book.getDestination();
-					if (route.size() == 2 && route.contains(from) && route.contains(to)) {
-						seatBookedList.addAll(book.getSeat());
-						bookedSeats += book.getSeat().size();
-					} else {
-						if ((route.contains(from) && !route.get(0).equals(from))
-								|| (route.contains(to) && !route.get(route.size() - 1).equals(to))) {
+					LocalDate journeyDate = book.getDateOfJourney();
+					
+					if (route.size() == 2 && route.contains(from) && route.contains(to)) 
+					{	
+						if(book.getDateOfJourney()!=null) {
+						if (date.isEqual(book.getDateOfJourney())) 
+						{
 							seatBookedList.addAll(book.getSeat());
 							bookedSeats += book.getSeat().size();
+						}}
+					} else 
+					{
+						if ((route.contains(from) && !route.get(0).equals(from))
+								|| (route.contains(to) && !route.get(route.size() - 1).equals(to))) 
+						{
+							if(book.getDateOfJourney()!=null)
+							{
+								if (date.isEqual(book.getDateOfJourney())) 
+								{
+								seatBookedList.addAll(book.getSeat());
+								bookedSeats += book.getSeat().size();
+								}
+							}
 						}
 					}
 				}
-				// System.out.println("in bookedSeats method 7");
-				seatBookedList.stream().forEach(s -> System.out.println(" " + s.getSeatid()));
 				return seatBookedList;
-
 			}
 			return null;
 		}
 		return null;
 	}
 
-	// public List<Bus> getinbetween(int source, int destination) {
-	// // TODO Auto-generated method stub
-	// // List<Bus> lst=new LinkedList<>();
-	// // for(Bus ls:Bus) {
-	// //
-	// // }
-	// return busrepository.findAllByInbetweenContaining(source,destination);
-	//
-	// }
-
-	public String bookBus(Long busId, Integer sourceId, Integer destinationId, int numberOfSeats) {
-		String message = bookingService.add(busId, sourceId, destinationId, numberOfSeats, numberOfSeats);
+	public String bookBus(Long busId, Integer sourceId, Integer destinationId, int numberOfSeats, LocalDate date,User user) {
+		String message = bookingService.add(busId, sourceId, destinationId, numberOfSeats,user, date);
 		return message;
 	}
 
@@ -178,10 +189,13 @@ public class BusService {
 		Optional<Bus> optionalBus = busRepository.findById(b.getBusId());
 		Bus bus = optionalBus.get();
 
-		if (b.getBusId() == null) {
+		if (b.getBusId() == null) 
+		{
 			busRepository.save(b);
 			return "new bus created";
-		} else {
+		} 
+		else 
+		{
 			bus.setBusType(b.getBusType());
 			bus.setDailyStartTime(b.getDailyStartTime());
 			bus.setDailyStopTime(b.getDailyStopTime());

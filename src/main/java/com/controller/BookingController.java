@@ -2,7 +2,9 @@ package com.controller;
 
 import java.util.List;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.entity.User;
 import com.service.BookingService;
 import com.service.BusService;
+import com.service.UserService;
 import com.wrapper.BookingDTO;
 
 @RestController
@@ -24,26 +28,36 @@ public class BookingController {
 	BusService busService;
 
 	@Autowired
+	UserService userService;
+	
+	@Autowired
 	BookingService bookingService;
 
+	/**
+	 * get booking by id
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "/{id}")
 	public BookingDTO getBooking(@PathVariable(value = "id") Integer id) {
 		return bookingService.get(id);
 	}
 
 	/**
-	 * Get number of available seats by giving busId,sourceId,destinationId in Get
-	 * request as Parameters
+	 * Get number of available seats in a particular bus by giving
+	 * busId,sourceId,destinationId in Get request as Parameters
 	 * 
 	 * @param busId
 	 * @param sourceId
 	 * @param destinationId
 	 * @return
 	 */
-	@GetMapping("/{busId}/{sourceId}/{destinationId}")
+	@GetMapping("/{busId}/{sourceId}/{destinationId}/{date}")
 	public int availableSeats(@PathVariable("busId") Long busId, @PathVariable("sourceId") Integer sourceId,
-			@PathVariable("destinationId") Integer destinationId) {
-		return busService.availableSeats(busId, sourceId, destinationId);
+			@PathVariable("destinationId") Integer destinationId,@PathVariable("date")String strdate) {
+		LocalDate date=new LocalDate(strdate);
+		return busService.availableSeats(busId, sourceId, destinationId,date);
 	}
 
 	/**
@@ -107,12 +121,17 @@ public class BookingController {
 	 * @param destinationId
 	 * @return
 	 */
-	@PostMapping(value = "/{userId}/{numberOfSeats}/{busId}/{sourceId}/{destinationId}")
+	@PostMapping(value = "/{userId}/{numberOfSeats}/{busId}/{sourceId}/{destinationId}/{localdate}")
 	@ResponseBody
 	public String add(@PathVariable("userId") Integer userId, @PathVariable("numberOfSeats") int numberOfSeats,
 			@PathVariable("busId") Long busId, @PathVariable("sourceId") Integer sourceId,
-			@PathVariable("destinationId") Integer destinationId) {
-		return bookingService.add(busId, numberOfSeats, sourceId, destinationId, userId);
+			@PathVariable("destinationId") Integer destinationId,
+			@PathVariable(value="localdate" ,required=false)
+	 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+			LocalDate date) 
+	{
+		User user = new User(userService.get(userId));
+		return bookingService.add(busId, numberOfSeats, sourceId, destinationId, user,date);
 	}
 
 	/**
@@ -124,7 +143,6 @@ public class BookingController {
 	 */
 	@DeleteMapping
 	@ResponseBody
-
 	public String deleteAll(@RequestBody List<BookingDTO> acc) {
 		return bookingService.delete(acc);
 	}
@@ -136,6 +154,7 @@ public class BookingController {
 	 * @param bookingId
 	 * @return
 	 */
+	
 	@DeleteMapping("/{id}")
 	@ResponseBody
 	public String deleteById(@PathVariable("id") Integer bookingId) {

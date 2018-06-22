@@ -98,7 +98,8 @@ public class StationService {
 		if (startPoint.isPresent()) {
 			Optional<Station> endPoint = stationRepository.findById(destination);
 			if (endPoint.isPresent()) {
-				if (startPoint.get().equals(endPoint.get())) {
+				if (startPoint.get().equals(endPoint.get())) 
+				{
 					return null;
 				}
 				List<Bus> allbus = busRepository.findAll();

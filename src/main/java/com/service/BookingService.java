@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,22 +49,23 @@ public class BookingService {
 	public String add(BookingDTO bookingDTO) 
 {
 		int numberOfSeats = bookingDTO.getNumberOfSeats();
-		Bus bus = new Bus(bookingDTO.getBusDTO());
-		Station source = new Station(bookingDTO.getFrom());
-		Station destination = new Station(bookingDTO.getDestination());
-		User user= new User(bookingDTO.getUserDTO()); 
-		return add(bus.getBusId(),numberOfSeats,source.getStationId(),destination.getStationId(),user.getUserid());
+		Bus bus = busRepository.findById(bookingDTO.getBusDTO().getBusId()).get();
+		Station source = stationRepository.findById(bookingDTO.getFrom().getStationId()).get();
+		Station destination =stationRepository.findById(bookingDTO.getDestination().getStationId()).get();
+		User user= userRepository.findById(bookingDTO.getUserDTO().getUserid()).get(); 
+		LocalDate date =bookingDTO.getDateOfJourney();
+		return add(bus.getBusId(),numberOfSeats,source.getStationId(),destination.getStationId(),user,date);
 	}
 
-	public String add(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId, Integer userId) 
+	public String add(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId, User user,LocalDate date) 
 	{
 		Bus bus = busRepository.findById(busId).get();
-		int available = busService.availableSeats(busId, sourceId, destinationId);
+		int available = busService.availableSeats(busId, sourceId, destinationId,date);
 		if (available > numberOfSeats) {
 			List<Seat> totalSeat = bus.getSeat();
 			if (totalSeat.isEmpty())
 				return "no seats in db";
-			List<Seat> seatsBooked = busService.bookedSeats(busId, sourceId, destinationId);
+			List<Seat> seatsBooked = busService.bookedSeats(busId, sourceId, destinationId,date);
 			List<Seat> newSeatBooking = new ArrayList<>();
 			int i = 0;
 			for (Seat seat : totalSeat) {
@@ -74,7 +76,8 @@ public class BookingService {
 						if (i == numberOfSeats)
 							break;
 					}
-				} else {
+				} else 
+				{
 					newSeatBooking.add(seat);
 					i++;
 					if (i == numberOfSeats)
@@ -83,7 +86,7 @@ public class BookingService {
 			}
 
 			Booking booking = new Booking(bus, stationRepository.findById(sourceId).get(),
-					stationRepository.findById(destinationId).get(), newSeatBooking);
+					stationRepository.findById(destinationId).get(), newSeatBooking,date,user);
 			bookingRepository.save(booking);
 			Long id = bus.getBusId();
 

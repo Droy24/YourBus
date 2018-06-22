@@ -92,10 +92,12 @@ public class Booking {
 		this.dateOfJourney = bookingDTO.getDateOfJourney();
 	}
 
-	public Booking(Bus bus, Station from, Station destination, List<Seat> seat) {
+	public Booking(Bus bus, Station from, Station destination, List<Seat> seat,LocalDate date,User user) {
+		this.user=user;
 		this.bus = bus;
 		this.from = from;
 		this.destination = destination;
+		this.dateOfJourney=date;
 		if (!seat.isEmpty()) {
 			this.seat = seat;
 		}

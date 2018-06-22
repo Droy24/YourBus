@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.entity.User;
 import com.service.UserService;
+import com.wrapper.UserDTO;
 
 @RestController
 @RequestMapping("/users")
@@ -30,7 +31,7 @@ public class UserController {
 
 	@PostMapping
 	@ResponseBody
-	public String newacc(@RequestBody List<User> acc) 
+	public String newacc(@RequestBody List<UserDTO> acc) 
 	{
 		System.out.println("in user post");
 		return userService.add(acc);
@@ -38,23 +39,23 @@ public class UserController {
 
 	@PostMapping("/login")
 	@ResponseBody
-	public String login(@RequestBody List<User> details) {
+	public String login(@RequestBody List<UserDTO> details) {
 		return userService.login(details);
 	}
 
 	@GetMapping(value = "/{id}")
-	public Optional<User> getid(@PathVariable(value = "id") Integer id) {
+	public UserDTO getid(@PathVariable(value = "id") Integer id) {
 		return userService.get(id);
 	}
 
 	@PostMapping(value = "/forgot")
 	@ResponseBody
-	public String forgot(@RequestBody User user) {
+	public String forgot(@RequestBody UserDTO user) {
 		return userService.forgot(user);
 	}
 
 	@GetMapping()
-	public List<User> getAll() {
+	public List<UserDTO> getAll() {
 		return userService.getAll();
 	}
 
@@ -66,7 +67,7 @@ public class UserController {
 
 	@DeleteMapping()
 	@ResponseBody
-	public String deleteByBody(@RequestBody List<User> acc) {
+	public String deleteByBody(@RequestBody List<UserDTO> acc) {
 		return userService.delete(acc);
 	}
 

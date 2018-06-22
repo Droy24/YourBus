@@ -2,12 +2,14 @@ package com.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.entity.User;
 import com.repository.UserRepository;
+import com.wrapper.UserDTO;
 
 @Service
 public class UserService {
@@ -15,22 +17,24 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public String add(List<User> acc) {
+	public String add(List<UserDTO> acc) {
 		System.out.println("in User add");
-		for (User a : acc) {
-			userRepository.save(a);
+		for (UserDTO a : acc) {
+			userRepository.save(new User(a));
 		}
 		return "save completed";
 	}
 
-	public List<User> getAll() {
+	public List<UserDTO> getAll() {
 		System.out.println("User get all");
-		return userRepository.findAll();
+		List<User> user= userRepository.findAll();
+		List<UserDTO> userDTO=user.stream().map(s->new UserDTO(s)).collect(Collectors.toList());
+		return userDTO;
 	}
 
-	public Optional<User> get(Integer id) {
+	public UserDTO get(Integer id) {
 		System.out.println("User get");
-		return userRepository.findById(id);
+		return new UserDTO(userRepository.findById(id).get());
 	}
 
 	public String delete(Integer id) {
@@ -42,11 +46,11 @@ public class UserService {
 		return "Succesful deletion";
 	}
 
-	public String delete(List<User> acc) {
+	public String delete(List<UserDTO> acc) {
 		System.out.println("Service delete all");
 		int count = 0;
 		int notfound = 0;
-		for (User user : acc) {
+		for (UserDTO user : acc) {
 			Optional<User> u = userRepository.findById(user.getUserid());
 			if (!u.isPresent()) {
 				System.out.println("Entry not found");
@@ -54,15 +58,15 @@ public class UserService {
 			} else
 				count++;
 		}
-
-		userRepository.deleteAll(acc);
-		return "deletion successful for :" + count + " Not succesful for: " + notfound;
+		List<User> userList=acc.stream().map(u->new User(u)).collect(Collectors.toList());
+		userRepository.deleteAll(userList);
+		return "deletion successful for : "+count+" Not succesful for: " + notfound;
 	}
 
-	public String login(List<User> details) {
+	public String login(List<UserDTO> details) {
 		String username = "";
 		String password = "";
-		for (User u : details) {
+		for (UserDTO u : details) {
 			username = u.getUsername();
 			password = u.getPassword();
 		}
@@ -74,7 +78,7 @@ public class UserService {
 
 	}
 
-	public String forgot(User user) {
+	public String forgot(UserDTO user) {
 
 		String username = user.getUsername();
 		String question = user.getQuestion();

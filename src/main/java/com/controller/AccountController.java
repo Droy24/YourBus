@@ -23,11 +23,6 @@ public class AccountController {
 	@Autowired
 	private AccountService accountService;
 
-	// @GetMapping(name = "/test")
-	// public void test() {
-	// System.out.println("checking");
-	// }
-
 	@PostMapping
 	@ResponseBody
 	public String newacc(@RequestBody List<Account> acc) {

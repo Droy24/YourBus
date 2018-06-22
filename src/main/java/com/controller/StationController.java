@@ -37,8 +37,8 @@ public class StationController {
 	}
 
 	@GetMapping(value = "/available/{id1}/{id2}")
-	public List<Bus> getavailable(@PathVariable(value = "id1") int source,
-	@PathVariable(value = "id2") int destination) {
+	public List<Bus> getavailable(@PathVariable(value = "id1") int source,@PathVariable(value = "id2") int destination) 
+	{
 	return stationService.findBus(source, destination);
 	}
 
@@ -60,7 +60,9 @@ public class StationController {
 
 	@DeleteMapping()
 	@ResponseBody
-	public String deleteByBody(@RequestBody List<StationDTO> acc) {
+	public String deleteByBody(@RequestBody List<StationDTO> acc) 
+	{
 		return stationService.delete(acc);
 	}
+	
 }
