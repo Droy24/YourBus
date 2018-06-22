@@ -5,16 +5,15 @@ import java.util.stream.Collectors;
 
 import com.entity.Station;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class StationDTO {
-
-	@JsonIgnore
+	
 	private Integer stationId;
-
-	@JsonIgnore
+	
 	private String stationName;
 
-	@JsonIgnore
 	private List<BusDTO> busList;
 
 	public StationDTO() {

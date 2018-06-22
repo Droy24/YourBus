@@ -2,43 +2,34 @@ package com.wrapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.joda.time.DateTime;
+
 import com.entity.Bus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@SuppressWarnings("deprecation")
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class BusDTO {
 
-	@JsonIgnore
 	private Long busId;
-	
-	@JsonIgnore
+
 	private String plateName;
-	
-	@JsonIgnore
+
 	private int seatsbooked;
-	
-	@JsonIgnore
+
 	private int totalSeats;
-	
-	@JsonIgnore
+
 	private int busType;
-	
-	@JsonIgnore
+
 	private DateTime dailyStartTime;
-	
-	@JsonIgnore
+
 	private DateTime dailyStopTime;
-	
-	@JsonIgnore
+
 	private List<Integer> fare;
-	
-	@JsonIgnore
+
 	private RouteDTO route;
-	
-	@JsonIgnore
+
 	private List<SeatDTO> seat;
 
 	public BusDTO() {

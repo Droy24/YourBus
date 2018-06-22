@@ -199,7 +199,6 @@ public class BusService {
 			bus.setSeatsbooked(b.getSeatsbooked());
 			bus.setTotalSeats(b.getTotalSeats());
 			bus.setBusType(b.getBusType());
-
 			busRepository.save(bus);
 			return "bus updated";
 		}

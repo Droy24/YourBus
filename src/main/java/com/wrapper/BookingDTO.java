@@ -9,37 +9,29 @@ import com.entity.Seat;
 import com.entity.Station;
 import com.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class BookingDTO {
-	
-	@JsonIgnore
+
 	private Integer bookingId;
 
-	@JsonIgnore
 	private BusDTO busDTO;
 
-	@JsonIgnore
 	private UserDTO userDTO;
 
-	@JsonIgnore
 	private List<SeatDTO> seatDTO;
 
-	@JsonIgnore
 	private StationDTO from;
 
-	@JsonIgnore
 	private StationDTO destination;
 
-	@JsonIgnore
 	private int fare;
 
-	@JsonIgnore
 	private LocalDate dateOfJourney;
 
-	@JsonIgnore
 	private int numberOfSeats;
 
-	@JsonIgnore
 	public int getNumberOfSeats() {
 		return numberOfSeats;
 	}
@@ -54,22 +46,23 @@ public class BookingDTO {
 
 	public BookingDTO(Booking booking) {
 		Bus bus = booking.getBus();
-		User user= booking.getUser();
+		User user = booking.getUser();
 		List<Seat> seat = booking.getSeat();
-		Station from =booking.getFrom();
-		Station destination =booking.getDestination();
-		
+		Station from = booking.getFrom();
+		Station destination = booking.getDestination();
+
 		this.bookingId = booking.getBookingId();
 		if (bus != null)
 			this.busDTO = new BusDTO(bus.getBusId(), bus.getPlateName());
 		if (user != null)
-			this.userDTO = new UserDTO(user.getUserid(),user.getName());
+			this.userDTO = new UserDTO(user.getUserid(), user.getName());
 		if (seat != null)
-			this.seatDTO = seat.stream().map(s -> new SeatDTO(s.getSeatid(),s.getSeatName())).collect(Collectors.toList());
+			this.seatDTO = seat.stream().map(s -> new SeatDTO(s.getSeatid(), s.getSeatName()))
+					.collect(Collectors.toList());
 		if (from != null)
-			this.from = new StationDTO(from.getStationId(),from.getStationname());
+			this.from = new StationDTO(from.getStationId(), from.getStationname());
 		if (destination != null)
-			this.destination = new StationDTO(destination.getStationId(),destination.getStationname());
+			this.destination = new StationDTO(destination.getStationId(), destination.getStationname());
 		this.fare = booking.getFare();
 		this.dateOfJourney = booking.getDateOfJourney();
 		if (this.seatDTO != null)

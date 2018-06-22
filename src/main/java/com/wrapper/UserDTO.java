@@ -3,78 +3,67 @@ package com.wrapper;
 import org.joda.time.LocalDate;
 
 import com.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
 
-	@JsonIgnore
 	private Integer userid;
 
-	@JsonIgnore
 	private String name;
 
-	@JsonIgnore
 	private String email;
 
-	@JsonIgnore
 	private String username;
 
-	@JsonIgnore
 	private String password;
 
-	@JsonIgnore
 	private String type;
 
-	@JsonIgnore
 	private String question;
 
-	@JsonIgnore
 	private String answer;
 
-	@JsonIgnore
 	private AccountDTO wallet;
 
-	@JsonIgnore
 	private Long mobile;
 
-	@JsonIgnore
 	private String address;
 
-	@JsonIgnore
 	private String insuranceId; // boolean type
 
-	@JsonIgnore
 	private LocalDate birthday;
 
-	@JsonIgnore
 	private int age;
-	
-	public UserDTO() {}
-	
-	public UserDTO(User user) {
-		this.userid=user.getUserid();
-		this.name=user.getName();
-		this.email=user.getEmail();
-		this.username=user.getUsername();
-		this.password=user.getPassword();
-		this.type=user.getType();
-		this.question=user.getQuestion();
-		this.answer=user.getAnswer();
-		
-		if(user.getWallet()!=null)
-		this.wallet=new AccountDTO(user.getWallet());
-		
-		this.mobile=user.getMobile();
-		this.address=user.getAddress();
-		this.insuranceId=user.getInsurance();
-		this.birthday=user.getBirthday();
-		this.age=user.getAge();
+
+	public UserDTO() {
 	}
 
-	public UserDTO(Integer userId,String userName) {
-		this.userid=userId;
-		this.username=userName;
+	public UserDTO(User user) {
+		this.userid = user.getUserid();
+		this.name = user.getName();
+		this.email = user.getEmail();
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.type = user.getType();
+		this.question = user.getQuestion();
+		this.answer = user.getAnswer();
+
+		if (user.getWallet() != null)
+			this.wallet = new AccountDTO(user.getWallet());
+
+		this.mobile = user.getMobile();
+		this.address = user.getAddress();
+		this.insuranceId = user.getInsurance();
+		this.birthday = user.getBirthday();
+		this.age = user.getAge();
 	}
+
+	public UserDTO(Integer userId, String userName) {
+		this.userid = userId;
+		this.username = userName;
+	}
+
 	public Integer getUserid() {
 		return userid;
 	}
