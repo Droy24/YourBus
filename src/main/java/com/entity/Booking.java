@@ -77,22 +77,20 @@ public class Booking {
 
 	public Booking(BookingDTO bookingDTO) {
 		this.bookingId = bookingDTO.getBookingId();
-		
 		if(bookingDTO.getBusDTO()!=null)
-		this.bus = new Bus(bookingDTO.getBusDTO());
-		
+		this.bus = new Bus(bookingDTO.getBusDTO());	
 		if(bookingDTO.getUserDTO()!=null)
 		this.user = new User(bookingDTO.getUserDTO());
 		if(bookingDTO.getSeatDTO()!=null)
 		this.seat = bookingDTO.getSeatDTO().stream().map(s -> new Seat(s)).collect(Collectors.toList());
-		
 		this.from = new Station(bookingDTO.getFrom());
 		this.destination = new Station(bookingDTO.getDestination());
 		this.fare = bookingDTO.getFare();
 		this.dateOfJourney = bookingDTO.getDateOfJourney();
 	}
 
-	public Booking(Bus bus, Station from, Station destination, List<Seat> seat,LocalDate date,User user) {
+	public Booking(Bus bus, Station from, Station destination, List<Seat> seat,LocalDate date,User user,int fare) {
+		this.fare=fare;
 		this.user=user;
 		this.bus = bus;
 		this.from = from;

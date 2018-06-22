@@ -1,27 +1,44 @@
 package com.wrapper;
 
-import java.sql.Time;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.joda.time.DateTime;
-
 import com.entity.Bus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @SuppressWarnings("deprecation")
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class BusDTO {
 
+	@JsonIgnore
 	private Long busId;
+	
+	@JsonIgnore
 	private String plateName;
+	
+	@JsonIgnore
 	private int seatsbooked;
+	
+	@JsonIgnore
 	private int totalSeats;
-	private String busType;
+	
+	@JsonIgnore
+	private int busType;
+	
+	@JsonIgnore
 	private DateTime dailyStartTime;
+	
+	@JsonIgnore
 	private DateTime dailyStopTime;
+	
+	@JsonIgnore
 	private List<Integer> fare;
+	
+	@JsonIgnore
 	private RouteDTO route;
+	
+	@JsonIgnore
 	private List<SeatDTO> seat;
 
 	public BusDTO() {
@@ -32,13 +49,18 @@ public class BusDTO {
 		this.plateName = bus.getPlateName();
 		this.seatsbooked = bus.getSeatsbooked();
 		this.totalSeats = bus.getTotalSeats();
-		this.busType = bus.getBustype();
+		this.busType = bus.getBusType();
 		this.dailyStartTime = bus.getDailyStartTime();
 		this.dailyStopTime = bus.getDailyStopTime();
 		if (bus.getRoute() != null)
 			this.route = new RouteDTO(bus.getRoute());
 		if (bus.getSeat() != null)
 			this.seat = bus.getSeat().stream().map(s -> new SeatDTO(s)).collect(Collectors.toList());
+	}
+
+	public BusDTO(Long busId, String plateName) {
+		this.busId = busId;
+		this.plateName = plateName;
 	}
 
 	public Long getBusId() {
@@ -97,11 +119,11 @@ public class BusDTO {
 		this.totalSeats = totalSeats;
 	}
 
-	public String getBusType() {
+	public int getBusType() {
 		return busType;
 	}
 
-	public void setBusType(String busType) {
+	public void setBusType(int busType) {
 		this.busType = busType;
 	}
 

@@ -1,22 +1,19 @@
 package com.wrapper;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import com.entity.Account;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AccountDTO {
-	
+
+	@JsonIgnore
 	private int accountId;
 
+	@JsonIgnore
 	private int money;
-	
-	public  AccountDTO(Account account)
-	{
-		this.accountId=account.getAccountid();
-		this.money=account.getMoney();
+
+	public AccountDTO(Account account) {
+		this.accountId = account.getAccountid();
+		this.money = account.getMoney();
 	}
 
 	public int getAccountId() {

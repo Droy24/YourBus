@@ -2,7 +2,6 @@ package com.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
@@ -23,6 +22,9 @@ import com.wrapper.BusDTO;
 
 @Service
 public class BookingService {
+
+	@Autowired
+	private ApplicationService applicationService;
 
 	@Autowired
 	private BookingRepository bookingRepository;
@@ -46,26 +48,25 @@ public class BookingService {
 			return new BookingDTO(bookingRepository.findById(id).get());
 	}
 
-	public String add(BookingDTO bookingDTO) 
-{
+	public String add(BookingDTO bookingDTO) {
 		int numberOfSeats = bookingDTO.getNumberOfSeats();
 		Bus bus = busRepository.findById(bookingDTO.getBusDTO().getBusId()).get();
 		Station source = stationRepository.findById(bookingDTO.getFrom().getStationId()).get();
-		Station destination =stationRepository.findById(bookingDTO.getDestination().getStationId()).get();
-		User user= userRepository.findById(bookingDTO.getUserDTO().getUserid()).get(); 
-		LocalDate date =bookingDTO.getDateOfJourney();
-		return add(bus.getBusId(),numberOfSeats,source.getStationId(),destination.getStationId(),user,date);
+		Station destination = stationRepository.findById(bookingDTO.getDestination().getStationId()).get();
+		User user = userRepository.findById(bookingDTO.getUserDTO().getUserid()).get();
+		LocalDate date = bookingDTO.getDateOfJourney();
+		return add(bus.getBusId(), numberOfSeats, source.getStationId(), destination.getStationId(), user, date);
 	}
 
-	public String add(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId, User user,LocalDate date) 
-	{
+	public String add(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId, User user,
+			LocalDate date) {
 		Bus bus = busRepository.findById(busId).get();
-		int available = busService.availableSeats(busId, sourceId, destinationId,date);
+		int available = busService.availableSeats(busId, sourceId, destinationId, date);
 		if (available > numberOfSeats) {
 			List<Seat> totalSeat = bus.getSeat();
 			if (totalSeat.isEmpty())
 				return "no seats in db";
-			List<Seat> seatsBooked = busService.bookedSeats(busId, sourceId, destinationId,date);
+			List<Seat> seatsBooked = busService.bookedSeats(busId, sourceId, destinationId, date);
 			List<Seat> newSeatBooking = new ArrayList<>();
 			int i = 0;
 			for (Seat seat : totalSeat) {
@@ -76,61 +77,97 @@ public class BookingService {
 						if (i == numberOfSeats)
 							break;
 					}
-				} else 
-				{
+				} else {
 					newSeatBooking.add(seat);
 					i++;
 					if (i == numberOfSeats)
 						break;
 				}
 			}
-
+			int distance = distanceBetween(busId, sourceId, destinationId);
+			int fare = calculateFare(bus.getBusType(), distance);
 			Booking booking = new Booking(bus, stationRepository.findById(sourceId).get(),
-					stationRepository.findById(destinationId).get(), newSeatBooking,date,user);
+					stationRepository.findById(destinationId).get(), newSeatBooking, date, user,fare);
 			bookingRepository.save(booking);
 			Long id = bus.getBusId();
 
 			int x = bus.getSeatsbooked() + numberOfSeats;
 			bus.setSeatsbooked(x);
-
-			bus.setPlateName("Thousand Sunny");
 			busRepository.save(bus);
-
 			return "Booking Confirmed " + booking.getBookingId() + " From: " + booking.getFrom().getStationname()
 					+ " To: " + booking.getDestination().getStationname();
 		}
 		return "Bus Seat unavailable";
 	}
 
-	public List<Seat> getSeats(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId)
- {
+	private int distanceBetween(Long busId, Integer sourceId, Integer destinationId) {
+		Bus bus = busRepository.findById(busId).get();
+		int initialIndex = 0, i = 0, destinationIndex = 0;
+		List<Station> stationList = bus.getRoute().getStops();
+		for (Station stn : stationList) {
+			Integer stationId = stn.getStationId();
+			if (stationId == sourceId) {
+				initialIndex = i;
+			}
+			if (stationId == destinationId) {
+				destinationIndex = i;
+			}
+			i++;
+		}
+		List<Integer> distance = bus.getRoute().getDistance();
+		Integer initialDistance = null, finalDistance = null;
+		int index = 0;
+		for (Integer x : distance) {
+			if (index == initialIndex)
+				initialDistance = x;
+			if (index == destinationIndex)
+				finalDistance = x;
+			index++;
+		}
+		int travelDistance = finalDistance - initialDistance;
+		return travelDistance;
+	}
+
+	public int calculateFare(int i, int distance) {
+		int fare = 0;
+		if (i == 1) {
+			fare = distance * applicationService.getAcFare();
+		}
+		if (i == 2) {
+			fare = distance * applicationService.getNonAcFare();
+		}
+		if (i == 3) {
+			fare = distance * applicationService.getSitting();
+		}
+		if (i == 4) {
+			fare = distance * applicationService.getSittingAcFare();
+		}
+		return fare;
+	}
+
+	public List<Seat> getSeats(Long busId, int numberOfSeats, Integer sourceId, Integer destinationId) {
 		return null;
 	}
 
-	public List<BookingDTO> getAllBookings()
- {
+	public List<BookingDTO> getAllBookings() {
 		return bookingRepository.findAll().stream().map(m -> new BookingDTO(m)).collect(Collectors.toList());
 	}
 
-	public String saveOrUpdateBooking(BookingDTO booking) 
-{
+	public String saveOrUpdateBooking(BookingDTO booking) {
 		System.out.println("new booking");
 		Booking book = new Booking(booking);
 		bookingRepository.save(book);
 		return "Successful booking";
 	}
 
-	public String saveOrUpdateBooking(Integer id, BookingDTO booking)      		//Remove ID
- {
+	public String saveOrUpdateBooking(Integer id, BookingDTO booking) // Remove ID
+	{
 		System.out.println("new/update single booking");
-		id=booking.getBookingId();
-		if (id == null)
-		{
+		id = booking.getBookingId();
+		if (id == null) {
 			bookingRepository.save(new Booking(booking));
 			return "Booking added";
-		}
-		else 
-		{
+		} else {
 			Booking bk = new Booking(booking);
 			Booking book = bookingRepository.findById(id).get();
 			book.setBus(bk.getBus());
@@ -145,15 +182,13 @@ public class BookingService {
 		}
 	}
 
-	public String delete(List<BookingDTO> acc) 
-{
+	public String delete(List<BookingDTO> acc) {
 		List<Booking> booking = acc.stream().map(s -> new Booking(s)).collect(Collectors.toList());
 		bookingRepository.deleteAll(booking);
 		return "Multiple Successful deletion";
 	}
 
-	public String deleteById(Integer bookingId) 
-{
+	public String deleteById(Integer bookingId) {
 		Booking booking = bookingRepository.findById(bookingId).get();
 		int size = booking.getSeat().size();
 		Bus bus = booking.getBus();

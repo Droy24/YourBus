@@ -4,42 +4,59 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.entity.Seat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class SeatDTO {
 
+	@JsonIgnore
 	private Long seatid;
 
+	@JsonIgnore
 	private boolean oldquota;
 
+	@JsonIgnore
 	private boolean ladiesquota;
 
+	@JsonIgnore
 	private boolean physicalquota;
 
+	@JsonIgnore
 	private boolean armyquota;
 
+	@JsonIgnore
 	private List<BookingDTO> bookingdto;
 
+	@JsonIgnore
 	private String type; // single lower ,single upper, double lower, double upper ,sitting
 
+	@JsonIgnore
+	private String seatName;
 	// private BusDTO bus;
 
 	public SeatDTO() {
 	}
 
-	public SeatDTO(Seat seat) {
+	public SeatDTO(Seat seat) 
+	{
 		this.seatid = seat.getSeatid();
 		this.oldquota = seat.isOldquota();
 		this.ladiesquota = seat.isLadiesquota();
 		this.physicalquota = seat.isPhysicalquota();
 		this.armyquota = seat.isArmyquota();
 		this.type = seat.getType();
+		this.seatName=seat.getSeatName();
 		// if(seat.getBooking()!=null)
 		// this.bookingdto=seat.getBooking().stream().map(s->new
 		// Booking()).collect(Collectors.toList());
 		// this.bus=new BusDTO (seat.getBus());
-
 	}
 
+	public SeatDTO(Long seatId,String seatName) 
+	{
+		this.seatid=seatId;
+		this.seatName=seatName;
+	}
+	
 	public Long getSeatid() {
 		return seatid;
 	}
@@ -94,6 +111,14 @@ public class SeatDTO {
 
 	public void setBookingdto(List<BookingDTO> bookingdto) {
 		this.bookingdto = bookingdto;
+	}
+
+	public String getSeatName() {
+		return seatName;
+	}
+
+	public void setSeatName(String seatName) {
+		this.seatName = seatName;
 	}
 	/*
 	 * public BusDTO getBus() { return bus; }

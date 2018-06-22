@@ -5,17 +5,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.entity.Route;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class RouteDTO {
 
+	@JsonIgnore
 	private Integer routeId;
 
+	@JsonIgnore
 	private String source;
 
+	@JsonIgnore
 	private String destination;
 
+	@JsonIgnore
 	private List<StationDTO> stops;
 
+	@JsonIgnore
 	private LinkedList<Integer> distance;
 
 	public RouteDTO() {

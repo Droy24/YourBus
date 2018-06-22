@@ -41,6 +41,8 @@ public class Seat {
 	@Column(name = "type")
 	private String type; // single lower ,single upper, double lower, double upper ,sitting
 
+	@Column(name="seatName")
+	private String seatName;
 	/*
 	 * @ManyToOne(fetch = FetchType.LAZY)
 	 * 
@@ -64,6 +66,7 @@ public class Seat {
 		this.oldquota = seatdto.isOldquota();
 		this.physicalquota = seatdto.isPhysicalquota();
 		this.type = seatdto.getType();
+		this.seatName=seatdto.getSeatName();
 
 	}
 
@@ -126,6 +129,15 @@ public class Seat {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public String getSeatName() {
+		return seatName;
+	}
+
+	public void setSeatName(String seatName) {
+		this.seatName = seatName;
+	}
+	
 
 	/*
 	 * public Bus getBus() { return bus; }

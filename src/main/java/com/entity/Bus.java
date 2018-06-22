@@ -3,7 +3,6 @@ package com.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,14 +14,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.joda.time.DateTime;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wrapper.BusDTO;
 
 @Entity
@@ -60,29 +56,33 @@ public class Bus {
 	private DateTime dailyStopTime;
 
 	@Column(name = "busType")
-	private String busType;
+	private int busType;
 
 	public Bus() {
 	}
 
 	public Bus(BusDTO busdto) {
-//		if(busId!=null)
-		 this.busId = busdto.getBusId();
+		// if(busId!=null)
+		this.busId = busdto.getBusId();
 		this.busType = busdto.getBusType();
 		this.totalSeats = busdto.getTotalSeats();
 		this.seatsbooked = busdto.getSeatsbooked();
 		if (busdto.getDailyStartTime() != null) {
 			this.dailyStartTime = busdto.getDailyStartTime();
 		}
-		if (busdto.getDailyStopTime() != null) {
+		if (busdto.getDailyStopTime() != null) 
+		{
 			this.dailyStopTime = busdto.getDailyStopTime();
 		}
 		this.plateName = busdto.getPlateName();
 		if (busdto.getRoute() != null)
 			this.route = new Route(busdto.getRoute());
-		if (busdto.getSeat() != null && !busdto.getSeat().isEmpty()) {
+		if (busdto.getSeat() != null && !busdto.getSeat().isEmpty()) 
+		{
 			this.seat = busdto.getSeat().stream().map(Seat::new).collect(Collectors.toList());
-		} else {
+		} 
+		else 
+		{
 			System.out.println("in bus seat constructor");
 			this.seat = createSeats(this.totalSeats);
 			System.out.println("seat created " + seat.size());
@@ -93,16 +93,17 @@ public class Bus {
 		List<Seat> seats = new ArrayList<>();
 		for (int i = 0; i < n; i++) {
 			Seat seat = new Seat();
+			seat.setSeatName("A-"+i);
 			seats.add(seat);
 		}
 		return seats;
 	}
 
-	public Bus(Long busId, String plateName, String busType,int seatsBooked) {
+	public Bus(Long busId, String plateName, int busType, int seatsBooked) {
 		this.busId = busId;
 		this.plateName = plateName;
 		this.busType = busType;
-		this.seatsbooked=seatsBooked;
+		this.seatsbooked = seatsBooked;
 	}
 
 	public int getSeatsbooked() {
@@ -117,11 +118,11 @@ public class Bus {
 		this.route = route;
 	}
 
-	public String getBusType() {
+	public int getBusType() {
 		return busType;
 	}
 
-	public void setBusType(String busType) {
+	public void setBusType(int busType) {
 		this.busType = busType;
 	}
 
@@ -131,14 +132,6 @@ public class Bus {
 
 	public void setSeat(List<Seat> seat) {
 		this.seat = seat;
-	}
-
-	public String getBustype() {
-		return busType;
-	}
-
-	public void setBustype(String bustype) {
-		this.busType = bustype;
 	}
 
 	public void setSeatsbooked(int seatsbooked) {
@@ -175,14 +168,6 @@ public class Bus {
 
 	public void setDailyStopTime(DateTime dailyStopTime) {
 		this.dailyStopTime = dailyStopTime;
-	}
-
-	public String getType() {
-		return busType;
-	}
-
-	public void setType(String type) {
-		this.busType = type;
 	}
 
 	public int getTotalSeats() {

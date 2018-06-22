@@ -1,7 +1,6 @@
 package com.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.entity.Bus;
-import com.entity.Station;
 import com.service.StationService;
 import com.wrapper.StationDTO;
 
@@ -37,19 +35,19 @@ public class StationController {
 	}
 
 	@GetMapping(value = "/available/{id1}/{id2}")
-	public List<Bus> getavailable(@PathVariable(value = "id1") int source,@PathVariable(value = "id2") int destination) 
-	{
-	return stationService.findBus(source, destination);
+	public List<Bus> getavailable(@PathVariable(value = "id1") int source,
+			@PathVariable(value = "id2") int destination) {
+		return stationService.findBus(source, destination);
 	}
 
 	@GetMapping(value = "/{id}")
 	public StationDTO getid(@PathVariable(value = "id") Integer id) {
-	return stationService.get(id);
+		return stationService.get(id);
 	}
 
 	@GetMapping()
 	public List<StationDTO> getAll() {
-	return stationService.getAll();
+		return stationService.getAll();
 	}
 
 	@DeleteMapping(value = "/{id}")
@@ -60,9 +58,8 @@ public class StationController {
 
 	@DeleteMapping()
 	@ResponseBody
-	public String deleteByBody(@RequestBody List<StationDTO> acc) 
-	{
+	public String deleteByBody(@RequestBody List<StationDTO> acc) {
 		return stationService.delete(acc);
 	}
-	
+
 }

@@ -1,6 +1,5 @@
 package com.service;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -133,9 +132,9 @@ public class BusService {
 						flag = 0;
 					}
 				}
-				
+
 				/**
-				 * Create route of given bus betweent given stations
+				 * Create route of given bus between given stations
 				 */
 
 				int bookedSeats = 0;
@@ -147,26 +146,21 @@ public class BusService {
 					Station from = book.getFrom();
 					Station to = book.getDestination();
 					LocalDate journeyDate = book.getDateOfJourney();
-					
-					if (route.size() == 2 && route.contains(from) && route.contains(to)) 
-					{	
-						if(book.getDateOfJourney()!=null) {
-						if (date.isEqual(book.getDateOfJourney())) 
-						{
-							seatBookedList.addAll(book.getSeat());
-							bookedSeats += book.getSeat().size();
-						}}
-					} else 
-					{
-						if ((route.contains(from) && !route.get(0).equals(from))
-								|| (route.contains(to) && !route.get(route.size() - 1).equals(to))) 
-						{
-							if(book.getDateOfJourney()!=null)
-							{
-								if (date.isEqual(book.getDateOfJourney())) 
-								{
+
+					if (route.size() == 2 && route.contains(from) && route.contains(to)) {
+						if (book.getDateOfJourney() != null) {
+							if (date.isEqual(book.getDateOfJourney())) {
 								seatBookedList.addAll(book.getSeat());
 								bookedSeats += book.getSeat().size();
+							}
+						}
+					} else {
+						if ((route.contains(from) && !route.get(0).equals(from))
+								|| (route.contains(to) && !route.get(route.size() - 1).equals(to))) {
+							if (book.getDateOfJourney() != null) {
+								if (date.isEqual(book.getDateOfJourney())) {
+									seatBookedList.addAll(book.getSeat());
+									bookedSeats += book.getSeat().size();
 								}
 							}
 						}
@@ -179,8 +173,9 @@ public class BusService {
 		return null;
 	}
 
-	public String bookBus(Long busId, Integer sourceId, Integer destinationId, int numberOfSeats, LocalDate date,User user) {
-		String message = bookingService.add(busId, sourceId, destinationId, numberOfSeats,user, date);
+	public String bookBus(Long busId, Integer sourceId, Integer destinationId, int numberOfSeats, LocalDate date,
+			User user) {
+		String message = bookingService.add(busId, sourceId, destinationId, numberOfSeats, user, date);
 		return message;
 	}
 
@@ -189,13 +184,10 @@ public class BusService {
 		Optional<Bus> optionalBus = busRepository.findById(b.getBusId());
 		Bus bus = optionalBus.get();
 
-		if (b.getBusId() == null) 
-		{
+		if (b.getBusId() == null) {
 			busRepository.save(b);
 			return "new bus created";
-		} 
-		else 
-		{
+		} else {
 			bus.setBusType(b.getBusType());
 			bus.setDailyStartTime(b.getDailyStartTime());
 			bus.setDailyStopTime(b.getDailyStopTime());
@@ -206,7 +198,7 @@ public class BusService {
 				bus.setSeat(b.getSeat());
 			bus.setSeatsbooked(b.getSeatsbooked());
 			bus.setTotalSeats(b.getTotalSeats());
-			bus.setType(b.getType());
+			bus.setBusType(b.getBusType());
 
 			busRepository.save(bus);
 			return "bus updated";

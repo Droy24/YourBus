@@ -29,7 +29,7 @@ public class BookingController {
 
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	BookingService bookingService;
 
@@ -55,9 +55,9 @@ public class BookingController {
 	 */
 	@GetMapping("/{busId}/{sourceId}/{destinationId}/{date}")
 	public int availableSeats(@PathVariable("busId") Long busId, @PathVariable("sourceId") Integer sourceId,
-			@PathVariable("destinationId") Integer destinationId,@PathVariable("date")String strdate) {
-		LocalDate date=new LocalDate(strdate);
-		return busService.availableSeats(busId, sourceId, destinationId,date);
+			@PathVariable("destinationId") Integer destinationId, @PathVariable("date") String strdate) {
+		LocalDate date = new LocalDate(strdate);
+		return busService.availableSeats(busId, sourceId, destinationId, date);
 	}
 
 	/**
@@ -121,17 +121,15 @@ public class BookingController {
 	 * @param destinationId
 	 * @return
 	 */
+
 	@PostMapping(value = "/{userId}/{numberOfSeats}/{busId}/{sourceId}/{destinationId}/{localdate}")
 	@ResponseBody
 	public String add(@PathVariable("userId") Integer userId, @PathVariable("numberOfSeats") int numberOfSeats,
 			@PathVariable("busId") Long busId, @PathVariable("sourceId") Integer sourceId,
 			@PathVariable("destinationId") Integer destinationId,
-			@PathVariable(value="localdate" ,required=false)
-	 		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-			LocalDate date) 
-	{
+			@PathVariable(value = "localdate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 		User user = new User(userService.get(userId));
-		return bookingService.add(busId, numberOfSeats, sourceId, destinationId, user,date);
+		return bookingService.add(busId, numberOfSeats, sourceId, destinationId, user, date);
 	}
 
 	/**
@@ -154,7 +152,7 @@ public class BookingController {
 	 * @param bookingId
 	 * @return
 	 */
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseBody
 	public String deleteById(@PathVariable("id") Integer bookingId) {

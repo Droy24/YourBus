@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import org.joda.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wrapper.UserDTO;
 
 @Entity
@@ -52,7 +53,7 @@ public class User {
 	private String address;
 
 	@Column(name = "insuranceId")
-	private int insuranceId; // boolean type
+	private String insuranceId; // boolean type
 
 	@Column(name = "date")
 	private LocalDate birthday;
@@ -86,7 +87,7 @@ public class User {
 	}
 
 	public User(String name, String email, String username, String password, String question, String answer,
-			Long mobile, String address, int insurance, LocalDate birthday, int age) {
+			Long mobile, String address, String insurance, LocalDate birthday, int age) {
 
 		// this.userid = userid;
 		this.name = name;
@@ -190,11 +191,11 @@ public class User {
 		this.address = address;
 	}
 
-	public int getInsurance() {
+	public String getInsurance() {
 		return insuranceId;
 	}
 
-	public void setInsurance(int insuranceId) {
+	public void setInsurance(String insuranceId) {
 		this.insuranceId = insuranceId;
 	}
 
@@ -227,11 +228,11 @@ public class User {
 		this.type = type;
 	}
 
-	public int getInsuranceId() {
+	public String getInsuranceId() {
 		return insuranceId;
 	}
 
-	public void setInsuranceId(int insuranceId) {
+	public void setInsuranceId(String insuranceId) {
 		this.insuranceId = insuranceId;
 	}
 

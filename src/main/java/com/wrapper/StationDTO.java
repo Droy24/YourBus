@@ -4,13 +4,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.entity.Station;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class StationDTO {
 
+	@JsonIgnore
 	private Integer stationId;
 
+	@JsonIgnore
 	private String stationName;
 
+	@JsonIgnore
 	private List<BusDTO> busList;
 
 	public StationDTO() {

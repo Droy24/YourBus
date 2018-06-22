@@ -3,35 +3,50 @@ package com.wrapper;
 import org.joda.time.LocalDate;
 
 import com.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDTO {
 
+	@JsonIgnore
 	private Integer userid;
 
+	@JsonIgnore
 	private String name;
 
+	@JsonIgnore
 	private String email;
 
+	@JsonIgnore
 	private String username;
 
+	@JsonIgnore
 	private String password;
 
+	@JsonIgnore
 	private String type;
 
+	@JsonIgnore
 	private String question;
 
+	@JsonIgnore
 	private String answer;
 
+	@JsonIgnore
 	private AccountDTO wallet;
 
+	@JsonIgnore
 	private Long mobile;
 
+	@JsonIgnore
 	private String address;
 
-	private int insuranceId; // boolean type
+	@JsonIgnore
+	private String insuranceId; // boolean type
 
+	@JsonIgnore
 	private LocalDate birthday;
 
+	@JsonIgnore
 	private int age;
 	
 	public UserDTO() {}
@@ -56,6 +71,10 @@ public class UserDTO {
 		this.age=user.getAge();
 	}
 
+	public UserDTO(Integer userId,String userName) {
+		this.userid=userId;
+		this.username=userName;
+	}
 	public Integer getUserid() {
 		return userid;
 	}
@@ -144,11 +163,11 @@ public class UserDTO {
 		this.address = address;
 	}
 
-	public int getInsuranceId() {
+	public String getInsuranceId() {
 		return insuranceId;
 	}
 
-	public void setInsuranceId(int insuranceId) {
+	public void setInsuranceId(String insuranceId) {
 		this.insuranceId = insuranceId;
 	}
 
