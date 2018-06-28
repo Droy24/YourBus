@@ -31,7 +31,6 @@ public class Station {
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@Nullable
-	@JsonIgnore
 	private List<Bus> busList;
 
 	public Station(Integer stationId, String stationname, List<Bus> busList) {

@@ -24,11 +24,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	// @GetMapping(name = "/test")
-	// public void test() {
-	// System.out.println("checking");
-	// }
-
 	@PostMapping
 	@ResponseBody
 	public String newacc(@RequestBody List<UserDTO> acc) 
@@ -48,15 +43,16 @@ public class UserController {
 		return userService.get(id);
 	}
 
+	@GetMapping
+	public List<UserDTO> getAllUsers()
+	{
+		return userService.getAll();
+	}
+	
 	@PostMapping(value = "/forgot")
 	@ResponseBody
 	public String forgot(@RequestBody UserDTO user) {
 		return userService.forgot(user);
-	}
-
-	@GetMapping()
-	public List<UserDTO> getAll() {
-		return userService.getAll();
 	}
 
 	@DeleteMapping(value = "/{id}")

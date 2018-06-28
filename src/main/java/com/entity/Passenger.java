@@ -52,6 +52,31 @@ public class Passenger {
 		this.fare = fare;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((passengerid == null) ? 0 : passengerid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Passenger other = (Passenger) obj;
+		if (passengerid == null) {
+			if (other.passengerid != null)
+				return false;
+		} else if (!passengerid.equals(other.passengerid))
+			return false;
+		return true;
+	}
+
 	/*
 	 * private Bus bus;
 	 * 

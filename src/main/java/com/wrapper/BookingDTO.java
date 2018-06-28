@@ -32,6 +32,8 @@ public class BookingDTO {
 
 	private int numberOfSeats;
 
+	private LocalDate dateOfBooking;
+	
 	public int getNumberOfSeats() {
 		return numberOfSeats;
 	}
@@ -50,17 +52,18 @@ public class BookingDTO {
 		List<Seat> seat = booking.getSeat();
 		Station from = booking.getFrom();
 		Station destination = booking.getDestination();
+		this.dateOfBooking=booking.getDateOfBooking();
 		this.bookingId = booking.getBookingId();
 		if (bus != null)
-			this.busDTO = new BusDTO(bus.getBusId(), bus.getPlateName());
+			this.busDTO = new BusDTO(bus);
 		if (user != null)
-			this.userDTO = new UserDTO(user.getUserid(), user.getName());
+			this.userDTO = new UserDTO(user);
 		if (seat != null)
-			this.seatDTO = seat.stream().map(s -> new SeatDTO(s.getSeatid(), s.getSeatName())).collect(Collectors.toList());
+			this.seatDTO = seat.stream().map(s -> new SeatDTO(s)).collect(Collectors.toList());
 		if (from != null)
-			this.from = new StationDTO(from.getStationId(), from.getStationname());
+			this.from = new StationDTO(from);
 		if (destination != null)
-			this.destination = new StationDTO(destination.getStationId(), destination.getStationname());
+			this.destination = new StationDTO(destination);
 		this.fare = booking.getFare();
 		this.dateOfJourney = booking.getDateOfJourney();
 		if (this.seatDTO != null)
@@ -140,5 +143,13 @@ public class BookingDTO {
 
 	public void setDateOfJourney(LocalDate dateOfJourney) {
 		this.dateOfJourney = dateOfJourney;
+	}
+
+	public LocalDate getDateOfBooking() {
+		return dateOfBooking;
+	}
+
+	public void setDateOfBooking(LocalDate dateOfBooking) {
+		this.dateOfBooking = dateOfBooking;
 	}
 }

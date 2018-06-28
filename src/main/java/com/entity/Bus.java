@@ -42,11 +42,9 @@ public class Bus {
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable
-	@JsonIgnore
 	private List<Seat> seat = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
-	@JsonIgnore
 	private Route route;
 
 	@Column(name = "dailystarttime")

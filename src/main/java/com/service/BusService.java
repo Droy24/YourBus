@@ -173,21 +173,20 @@ public class BusService {
 		return null;
 	}
 
-	public String bookBus(Long busId, Integer sourceId, Integer destinationId, int numberOfSeats, LocalDate date,
+	public String bookBus(Long busId, Integer sourceId, Integer destinationId, List<Seat> seats, LocalDate date,
 			User user) {
-		String message = bookingService.add(busId, sourceId, destinationId, numberOfSeats, user, date);
+		String message = bookingService.add(busId,seats, sourceId,destinationId,user,date);
 		return message;
 	}
 
 	public String saveAndUpdateBus(BusDTO busDTO) {
 		Bus b = new Bus(busDTO);
-		Optional<Bus> optionalBus = busRepository.findById(b.getBusId());
-		Bus bus = optionalBus.get();
-
-		if (b.getBusId() == null) {
+		if (busDTO.getBusId()==null) {
 			busRepository.save(b);
 			return "new bus created";
 		} else {
+			Optional<Bus> optionalBus = busRepository.findById(busDTO.getBusId());
+			Bus bus = optionalBus.get();
 			bus.setBusType(b.getBusType());
 			bus.setDailyStartTime(b.getDailyStartTime());
 			bus.setDailyStopTime(b.getDailyStopTime());

@@ -18,8 +18,6 @@ public class SeatDTO {
 
 	private boolean armyquota;
 
-	private List<BookingDTO> bookingdto;
-
 	private String type; // single lower ,single upper, double lower, double upper ,sitting
 
 	private String seatName;
@@ -93,14 +91,6 @@ public class SeatDTO {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public List<BookingDTO> getBookingdto() {
-		return bookingdto;
-	}
-
-	public void setBookingdto(List<BookingDTO> bookingdto) {
-		this.bookingdto = bookingdto;
 	}
 
 	public String getSeatName() {

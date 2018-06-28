@@ -136,6 +136,31 @@ public class Seat {
 	public void setSeatName(String seatName) {
 		this.seatName = seatName;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((seatid == null) ? 0 : seatid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Seat other = (Seat) obj;
+		if (seatid == null) {
+			if (other.seatid != null)
+				return false;
+		} else if (!seatid.equals(other.seatid))
+			return false;
+		return true;
+	}
 	
 
 	/*

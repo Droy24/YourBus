@@ -30,31 +30,35 @@ public class TransactionController {
 
 	@PostMapping
 	@ResponseBody
-	public String newacc(@RequestBody List<Transaction> acc) {
+	public String newacc(@RequestBody List<Transaction> acc) 
+	{
 		System.out.println("in transaction post");
 		return transactionService.add(acc);
-
 	}
 
 	@GetMapping(value = "/{id}")
-	public Optional<Transaction> getid(@PathVariable(value = "id") Integer id) {
+	public Optional<Transaction> getid(@PathVariable(value = "id") Integer id) 
+	{
 		return transactionService.get(id);
 	}
 
 	@GetMapping()
-	public List<Transaction> getAll() {
+	public List<Transaction> getAll() 
+	{
 		return transactionService.getAll();
 	}
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseBody
-	public String deleteById(@PathVariable(value = "id") Integer id) {
+	public String deleteById(@PathVariable(value = "id") Integer id) 
+	{
 		return transactionService.delete(id);
 	}
 
 	@DeleteMapping()
 	@ResponseBody
-	public String deleteByBody(@RequestBody List<Transaction> acc) {
+	public String deleteByBody(@RequestBody List<Transaction> acc) 
+	{
 		return transactionService.delete(acc);
 	}
 

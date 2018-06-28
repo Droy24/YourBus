@@ -157,4 +157,29 @@ public class Ticket {
 		this.busName = busName;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((busId == null) ? 0 : busId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Ticket other = (Ticket) obj;
+		if (busId == null) {
+			if (other.busId != null)
+				return false;
+		} else if (!busId.equals(other.busId))
+			return false;
+		return true;
+	}
+
 }

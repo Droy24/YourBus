@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.entity.Seat;
 import com.entity.User;
 import com.service.BookingService;
 import com.service.BusService;
 import com.service.UserService;
+import com.utility.Mail;
 import com.wrapper.BookingDTO;
 
 @RestController
@@ -32,7 +34,7 @@ public class BookingController {
 
 	@Autowired
 	BookingService bookingService;
-
+	
 	/**
 	 * get booking by id
 	 * 
@@ -40,11 +42,16 @@ public class BookingController {
 	 * @return
 	 */
 	@GetMapping(value = "/{id}")
-	public BookingDTO getBooking(@PathVariable(value = "id") Integer id) 
-	{
+	public BookingDTO getBooking(@PathVariable(value = "id") Integer id) {
 		return bookingService.get(id);
 	}
 
+	@PostMapping(value="/mail")
+	@ResponseBody
+	public String sendMail(@RequestBody Mail mail)
+	{
+		return bookingService.sendMail(mail);
+	}
 	/**
 	 * Get number of available seats in a particular bus by giving
 	 * busId,sourceId,destinationId in Get request as Parameters
@@ -54,6 +61,7 @@ public class BookingController {
 	 * @param destinationId
 	 * @return
 	 */
+	
 	@GetMapping("/{busId}/{sourceId}/{destinationId}/{date}")
 	public int availableSeats(@PathVariable("busId") Long busId, @PathVariable("sourceId") Integer sourceId,
 			@PathVariable("destinationId") Integer destinationId, @PathVariable("date") String strdate) {
@@ -66,6 +74,7 @@ public class BookingController {
 	 * 
 	 * @return
 	 */
+	
 	@GetMapping
 	public List<BookingDTO> getAllBookings() {
 		return bookingService.getAllBookings();
@@ -77,6 +86,7 @@ public class BookingController {
 	 * @param booking
 	 * @return
 	 */
+	
 	@PostMapping("/new")
 	@ResponseBody
 	public String addBooking(@RequestBody BookingDTO booking) {
@@ -90,6 +100,7 @@ public class BookingController {
 	 * @param booking
 	 * @return
 	 */
+	
 	@PostMapping(value = "/{id}")
 	@ResponseBody
 	public String saveAndUpdateBooking(@PathVariable(value = "id") Integer id, @RequestBody BookingDTO booking) {
@@ -104,6 +115,7 @@ public class BookingController {
 	 * @param bookingDTO
 	 * @return
 	 */
+	
 	@PostMapping
 	@ResponseBody
 	public String newBooking(@RequestBody BookingDTO bookingDTO) {
@@ -127,10 +139,10 @@ public class BookingController {
 	@ResponseBody
 	public String add(@PathVariable("userId") Integer userId, @PathVariable("numberOfSeats") int numberOfSeats,
 			@PathVariable("busId") Long busId, @PathVariable("sourceId") Integer sourceId,
-			@PathVariable("destinationId") Integer destinationId,
-			@PathVariable(value = "localdate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+			@PathVariable("destinationId") Integer destinationId, @RequestBody List<Seat> seats,
+			@PathVariable(value = "localdate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfJourney) {
 		User user = new User(userService.get(userId));
-		return bookingService.add(busId, numberOfSeats, sourceId, destinationId, user, date);
+		return bookingService.add(busId, seats, sourceId, destinationId, user, dateOfJourney);
 	}
 
 	/**
@@ -140,6 +152,7 @@ public class BookingController {
 	 * @param acc
 	 * @return
 	 */
+	
 	@DeleteMapping
 	@ResponseBody
 	public String deleteAll(@RequestBody List<BookingDTO> acc) {

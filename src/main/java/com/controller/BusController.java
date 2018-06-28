@@ -22,11 +22,6 @@ public class BusController {
 	@Autowired
 	private BusService busService;
 
-	// @GetMapping(name = "/test")
-	// public void test() {
-	// System.out.println("checking");
-	// }
-
 	@PostMapping("/many")
 	@ResponseBody
 	public String newacc(@RequestBody List<BusDTO> acc) {
