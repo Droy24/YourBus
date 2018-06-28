@@ -2,6 +2,7 @@ package com.controller;
 
 import java.util.List;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.service.BookingService;
 import com.service.BusService;
 import com.wrapper.BusDTO;
 
@@ -21,6 +23,9 @@ public class BusController {
 
 	@Autowired
 	private BusService busService;
+	
+	@Autowired 
+	private BookingService bookingService;
 
 	@PostMapping("/many")
 	@ResponseBody
@@ -58,9 +63,10 @@ public class BusController {
 		return busService.delete(bus);
 	}
 
-	@GetMapping("/{busId}/{from}/{to}")
-	public int availableSeats(@PathVariable("busId")Long busId,@PathVariable("from")Integer sourceId,@PathVariable("to")Integer destinationId )
+	@PostMapping("/{busId}/{from}/{to}")
+	@ResponseBody
+	public int availableSeats(@PathVariable("busId")Long busId,@PathVariable("from")Integer sourceId,@PathVariable("to")Integer destinationId ,@RequestBody LocalDate dateOfJourney)
 	{
-		return availableSeats(busId,sourceId,destinationId);
+		return busService.availableSeats(busId,sourceId,destinationId,dateOfJourney);
 	}
 }
