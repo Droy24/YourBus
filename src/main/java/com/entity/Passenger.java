@@ -22,7 +22,6 @@ public class Passenger {
 	}
 
 	public Passenger(Long passengerid, int fare, String passengerName) {
-
 		this.passengerid = passengerid;
 		this.fare = fare;
 		this.passengerName = passengerName;

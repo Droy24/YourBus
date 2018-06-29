@@ -27,6 +27,7 @@ public class Station {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer stationId;
 
+	@Nullable
 	private String stationName;
 
 	@OneToMany(fetch = FetchType.LAZY)

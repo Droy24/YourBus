@@ -19,7 +19,7 @@ public class SeatService {
 
 	public SeatDTO get(Long id) {
 		Optional<Seat> seat = seatRepository.findById(id);
-		if (!seat.isPresent())
+		if(!seat.isPresent())
 			return null;
 		return new SeatDTO(seat.get());
 	}
@@ -45,12 +45,16 @@ public class SeatService {
 	}
 
 	public String add(SeatDTO seat) {
-		if (seat != null) {
+	
+		if (seat != null) 
+		{
 			seatRepository.save(new Seat(seat));
 			return "Saved Successfully";
 		}
 		return "Seat invalid";
 	}
+
+
 
 	public String delete(Long id) {
 		if (!seatRepository.findById(id).isPresent())
@@ -65,5 +69,7 @@ public class SeatService {
 		seatRepository.deleteAll(seatdto.stream().map(s -> new Seat(s)).collect(Collectors.toList()));
 		return "Multiple Seats deleted ";
 	}
+	
+	
 
 }

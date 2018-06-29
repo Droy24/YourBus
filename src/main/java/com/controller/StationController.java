@@ -30,18 +30,18 @@ public class StationController {
 
 	@PostMapping
 	@ResponseBody
-	public String newacc(@RequestBody List<StationDTO> acc) {
+	public String newStations(@RequestBody List<StationDTO> acc) {
 		return stationService.add(acc);
 	}
 
 	@GetMapping(value = "/available/{id1}/{id2}")
-	public List<Bus> getavailable(@PathVariable(value = "id1") int source,
+	public List<Bus> getAvailable(@PathVariable(value = "id1") int source,
 			@PathVariable(value = "id2") int destination) {
 		return stationService.findBus(source, destination);
 	}
 
 	@GetMapping(value = "/{id}")
-	public StationDTO getid(@PathVariable(value = "id") Integer id) {
+	public StationDTO getById(@PathVariable(value = "id") Integer id) {
 		return stationService.get(id);
 	}
 
@@ -61,5 +61,4 @@ public class StationController {
 	public String deleteByBody(@RequestBody List<StationDTO> acc) {
 		return stationService.delete(acc);
 	}
-
 }

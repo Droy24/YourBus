@@ -16,8 +16,10 @@ import com.entity.Bus;
 import com.entity.Seat;
 import com.entity.Station;
 import com.entity.User;
+import com.exception.UnprocessableEntityException;
 import com.repository.BookingRepository;
 import com.repository.BusRepository;
+import com.repository.RouteRepository;
 import com.repository.StationRepository;
 import com.wrapper.BusDTO;
 import com.wrapper.StationDTO;
@@ -40,13 +42,21 @@ public class BusService {
 	@Autowired
 	private StationService stationService;
 
+	@Autowired
+	private RouteService routeService;
+
+	@Autowired
+	private RouteRepository routeRepository;
+
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public String add(List<BusDTO> dto) {
+	public String add(List<BusDTO> dto) 
+	{
 		logger.info("To save and update Bus.");
 		System.out.println("in bus add");
 		List<StationDTO> stationList = new ArrayList<>();
 		for (BusDTO busdto : dto) {
+			validateBus(busdto);
 			/*
 			 * int numberOfTotalSeats=busdto.getSeats(); for(int
 			 * i=0;i<numberOfTotalSeats;i++) { StationDTO st=new StationDTO();
@@ -95,9 +105,10 @@ public class BusService {
 		return "Invalid id";
 	}
 
-	public String delete(List<BusDTO> acc) {
+	public String delete(List<BusDTO> busList) {
+		busList.stream().forEach(s -> validateBus(s));
 		System.out.println("Account delete all");
-		List<Bus> bus = acc.stream().map(s -> new Bus(s)).collect(Collectors.toList());
+		List<Bus> bus = busList.stream().map(s -> new Bus(s)).collect(Collectors.toList());
 		busRepository.deleteAll(bus);
 		return "Multiple deletion successful";
 	}
@@ -175,31 +186,58 @@ public class BusService {
 
 	public String bookBus(Long busId, Integer sourceId, Integer destinationId, List<Seat> seats, LocalDate date,
 			User user) {
-		String message = bookingService.add(busId,seats, sourceId,destinationId,user,date);
+		String message = bookingService.add(busId, seats, sourceId, destinationId, user, date);
 		return message;
 	}
 
 	public String saveAndUpdateBus(BusDTO busDTO) {
 		Bus b = new Bus(busDTO);
-		if (busDTO.getBusId()==null) {
+		if (busDTO.getBusId() == null) {
 			busRepository.save(b);
 			return "new bus created";
 		} else {
 			Optional<Bus> optionalBus = busRepository.findById(busDTO.getBusId());
 			Bus bus = optionalBus.get();
-			bus.setBusType(b.getBusType());
-			bus.setDailyStartTime(b.getDailyStartTime());
-			bus.setDailyStopTime(b.getDailyStopTime());
-			bus.setPlateName(b.getPlateName());
+			if (b.getBusType() != 0)
+				bus.setBusType(b.getBusType());
+			if (b.getDailyStartTime() != null)
+				bus.setDailyStartTime(b.getDailyStartTime());
+			if (b.getDailyStopTime() != null)
+				bus.setDailyStopTime(b.getDailyStopTime());
+			if (b.getPlateName() != null)
+				bus.setPlateName(b.getPlateName());
 			if (b.getRoute() != null)
 				bus.setRoute(b.getRoute());
 			if (b.getSeat() != null)
 				bus.setSeat(b.getSeat());
-			bus.setSeatsbooked(b.getSeatsbooked());
-			bus.setTotalSeats(b.getTotalSeats());
-			bus.setBusType(b.getBusType());
+			if (b.getTotalSeats() > 0)
+				bus.setTotalSeats(b.getTotalSeats());
+			if (b.getSeatsbooked() > 0 && b.getTotalSeats() > b.getSeatsbooked())
+				bus.setSeatsbooked(b.getSeatsbooked());
+			if (b.getBusType() == 1 || b.getBusType() == 2 || b.getBusType() == 3 || b.getBusType() == 4)
+				bus.setBusType(b.getBusType());
 			busRepository.save(bus);
 			return "bus updated";
 		}
 	}
+
+	public void validateBus(BusDTO busDTO) {
+		if (busDTO.getTotalSeats() == 0) {
+			logger.error("Please enter valid total seats.");
+			throw new UnprocessableEntityException("Please enter valid total seats.");
+		}
+		if (busDTO.getRoute() == null) {
+			if (routeRepository.findById(busDTO.getRoute().getRouteId()).get() == null) {
+				logger.error("Please enter valid route.");
+				throw new UnprocessableEntityException("Route does not exists.");
+			}
+			logger.error("Please enter valid route.");
+			throw new UnprocessableEntityException(" Please enter valid route.");
+		}
+		if (busDTO.getTotalSeats() == 0) {
+			logger.error("Please enter valid route.");
+			throw new UnprocessableEntityException(" Please enter total route.");
+		}
+	}
+
 }
