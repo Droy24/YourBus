@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.entity.Bus;
 import com.entity.Route;
 import com.entity.Station;
+import com.exception.UnprocessableEntityException;
 import com.repository.BusRepository;
 import com.repository.RouteRepository;
 import com.repository.StationRepository;
@@ -27,9 +30,10 @@ public class StationService {
 	@Autowired
 	BusRepository busRepository;
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	public String add(List<StationDTO> acc) {
 		System.out.println("in Station add");
-
 		for (StationDTO a : acc) {
 			Station st = new Station(a);
 			stationRepository.save(st);
@@ -118,5 +122,14 @@ public class StationService {
 		}
 		System.out.println("Source is not found");
 		return null;
+	}
+	
+	public void validateStation(StationDTO station)
+	{
+		if(station.getStationId()<1) {
+			logger.error("Please enter valid seat Id.");
+			throw new UnprocessableEntityException("Please enter valid seat Id.");
+		}
+		
 	}
 }

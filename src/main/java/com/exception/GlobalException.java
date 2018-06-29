@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 /**
  * Global exception handler class for all the HTTP type requests.
  * 
- * @author Devasheesh
+ * @author Pardeep
  * @version 1.0
  */
 @ControllerAdvice
@@ -181,13 +181,11 @@ public class GlobalException {
 	{
 		private String message;
 
-		public String getMessage() 
-		{
+		public String getMessage() {
 			return message;
 		}
 
-		public void setMessage(String message) 
-		{
+		public void setMessage(String message) {
 			this.message = message;
 		}
 	}

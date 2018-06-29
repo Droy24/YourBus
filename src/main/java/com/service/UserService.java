@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.entity.User;
+import com.exception.UnprocessableEntityException;
 import com.repository.UserRepository;
 import com.wrapper.UserDTO;
 
@@ -17,18 +21,21 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public String add(List<UserDTO> acc) {
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	public String add(List<UserDTO> userlist) {
 		System.out.println("in User add");
-		for (UserDTO a : acc) {
-			userRepository.save(new User(a));
+		for (UserDTO user : userlist) {
+			validateUser(user);
+			userRepository.save(new User(user));
 		}
 		return "save completed";
 	}
 
 	public List<UserDTO> getAll() {
 		System.out.println("User get all");
-		List<User> user= userRepository.findAll();
-		List<UserDTO> userDTO=user.stream().map(s->new UserDTO(s)).collect(Collectors.toList());
+		List<User> user = userRepository.findAll();
+		List<UserDTO> userDTO = user.stream().map(s -> new UserDTO(s)).collect(Collectors.toList());
 		return userDTO;
 	}
 
@@ -58,9 +65,9 @@ public class UserService {
 			} else
 				count++;
 		}
-		List<User> userList=acc.stream().map(u->new User(u)).collect(Collectors.toList());
+		List<User> userList = acc.stream().map(u -> new User(u)).collect(Collectors.toList());
 		userRepository.deleteAll(userList);
-		return "deletion successful for : "+count+" Not succesful for: " + notfound;
+		return "deletion successful for : " + count + " Not succesful for: " + notfound;
 	}
 
 	public String login(List<UserDTO> details) {
@@ -79,7 +86,6 @@ public class UserService {
 	}
 
 	public String forgot(UserDTO user) {
-
 		String username = user.getUsername();
 		String question = user.getQuestion();
 		String answer = user.getPassword();
@@ -89,5 +95,20 @@ public class UserService {
 			return "Wrong entry";
 		else
 			return us.toString();
+	}
+
+	public void validateUser(UserDTO user) {
+		if (StringUtils.isBlank(user.getPassword())) {
+			logger.error("Invalid User password.");
+			throw new UnprocessableEntityException("Invalid password.");
+		}
+		if (StringUtils.isBlank(user.getUsername())) {
+			logger.error("Invalid Username.");
+			throw new UnprocessableEntityException("Invalid username.");
+		}
+		if (user.getMobile() == 0) {
+			logger.error("Invalid mobile number");
+			throw new UnprocessableEntityException("Invalid mobile number");
+		}
 	}
 }

@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -32,7 +32,7 @@ public class Route {
 
 	private String destination;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(name = "Route_stations")
 	private List<Station> stops = new ArrayList<>();
 
@@ -146,6 +146,5 @@ public class Route {
 			return false;
 		return true;
 	}
-	
 
 }

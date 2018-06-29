@@ -78,8 +78,7 @@ public class BookingService {
 		User user;
 		Station destination;
 		validateAddBooking(bookingDTO);
-		if (!bookingDTO.getSeatDTO().isEmpty()) 
-		{
+		if (!bookingDTO.getSeatDTO().isEmpty()) {
 			seats = bookingDTO.getSeatDTO().stream().map(Seat::new).collect(Collectors.toList());
 		} else {
 			return "Mention the seats for booking";
@@ -169,13 +168,16 @@ public class BookingService {
 	}
 
 	private int distanceBetween(Long busId, Integer sourceId, Integer destinationId) {
-		validateDistanceBetween(busId,sourceId,destinationId);
+		validateDistanceBetween(busId, sourceId, destinationId);
 		Bus bus = busRepository.findById(busId).get();
-		if(bus==null) return 0;
+		if (bus == null)
+			return 0;
 		Station source = stationRepository.findById(sourceId).get();
-		if(source==null) return 0;
+		if (source == null)
+			return 0;
 		Station destination = stationRepository.findById(destinationId).get();
-		if(destination==null) return 0;
+		if (destination == null)
+			return 0;
 		int initialIndex = 0, i = 0, destinationIndex = 0;
 		Integer initialDistance = null, finalDistance = null;
 		List<Station> stationList = bus.getRoute().getStops();
@@ -197,7 +199,6 @@ public class BookingService {
 		int travelDistance = finalDistance - initialDistance;
 		return travelDistance;
 	}
-
 
 	public int calculateFare(int i, int distance) {
 		int fare = 0;
@@ -261,6 +262,8 @@ public class BookingService {
 
 	public String deleteById(Integer bookingId) {
 		Booking booking = bookingRepository.findById(bookingId).get();
+		if (booking == null)
+			return "Booking id does not exists";
 		int size = booking.getSeat().size();
 		Bus bus = booking.getBus();
 
@@ -271,8 +274,7 @@ public class BookingService {
 		return "Successful deletion";
 	}
 
-	public void validateAddBooking(BookingDTO bookingDTO) 
-	{
+	public void validateAddBooking(BookingDTO bookingDTO) {
 		logger.info("To validate Booking details");
 		if (bookingDTO.getBusDTO().getBusId() <= 0) {
 			logger.error("Please enter valid booking Id.");
@@ -299,22 +301,20 @@ public class BookingService {
 			throw new UnprocessableEntityException("Please enter valid user Id.");
 		}
 	}
-	
 
 	private void validateDistanceBetween(Long busId, Integer sourceId, Integer destinationId) {
-	if(busId<1 ) {
-		logger.error("Please enter valid bus Id");
-		throw new UnprocessableEntityException("Please enter valid bus Id.");
-	}
-	if(sourceId<1) {
-		logger.error("Please enter valid source Id.");
-		throw new UnprocessableEntityException("Please enter valid source Id.");
-	}	
-	if(destinationId<1) {
-		logger.error("Please enter valid destination Id.");
-		throw new UnprocessableEntityException("Please enter valid destination Id.");
+		if (busId < 1) {
+			logger.error("Please enter valid bus Id");
+			throw new UnprocessableEntityException("Please enter valid bus Id.");
+		}
+		if (sourceId < 1) {
+			logger.error("Please enter valid source Id.");
+			throw new UnprocessableEntityException("Please enter valid source Id.");
+		}
+		if (destinationId < 1) {
+			logger.error("Please enter valid destination Id.");
+			throw new UnprocessableEntityException("Please enter valid destination Id.");
 		}
 	}
-	
-	
+
 }
