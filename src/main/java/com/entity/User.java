@@ -20,8 +20,8 @@ import com.wrapper.UserDTO;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer userid;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer userId;
 
 	@Column(name = "name")
 	@Nullable
@@ -69,6 +69,10 @@ public class User {
 	@Nullable
 	private int age;
 
+	private boolean active;
+
+	private boolean deleted;
+	
 	// @OneToMany
 	// private Booking ticket;
 
@@ -76,7 +80,7 @@ public class User {
 	}
 
 	public User(UserDTO userDTO) {
-		this.userid = userDTO.getUserid();
+		this.userId = userDTO.getUserid();
 		this.address = userDTO.getAddress();
 		this.age = userDTO.getAge();
 		this.answer = userDTO.getAnswer();
@@ -128,11 +132,11 @@ public class User {
 	}
 
 	public Integer getUserid() {
-		return userid;
+		return userId;
 	}
 
-	public void setUserid(Integer userid) {
-		this.userid = userid;
+	public void setUserid(Integer userId) {
+		this.userId = userId;
 	}
 
 	public String getName() {
