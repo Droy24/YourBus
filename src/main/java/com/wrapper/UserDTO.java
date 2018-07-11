@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
 
-	private Integer userid;
+	private Long userid;
 
 	private String name;
 
@@ -35,6 +35,8 @@ public class UserDTO {
 	private LocalDate birthday;
 
 	private int age;
+	
+	private String role;
 
 	public UserDTO() {
 	}
@@ -57,18 +59,19 @@ public class UserDTO {
 		this.insuranceId = user.getInsurance();
 		this.birthday = user.getBirthday();
 		this.age = user.getAge();
+		this.role=user.getRole();
 	}
 
-	public UserDTO(Integer userId, String userName) {
+	public UserDTO(Long userId, String userName) {
 		this.userid = userId;
 		this.username = userName;
 	}
 
-	public Integer getUserid() {
+	public Long getUserid() {
 		return userid;
 	}
 
-	public void setUserid(Integer userid) {
+	public void setUserid(Long userid) {
 		this.userid = userid;
 	}
 
@@ -174,6 +177,14 @@ public class UserDTO {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

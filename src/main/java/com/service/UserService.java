@@ -27,17 +27,17 @@ public class UserService {
 
 	public List<UserDTO> getAll() {
 		System.out.println("User get all");
-		List<User> user= userRepository.findAll();
-		List<UserDTO> userDTO=user.stream().map(s->new UserDTO(s)).collect(Collectors.toList());
+		List<User> user = userRepository.findAll();
+		List<UserDTO> userDTO = user.stream().map(s -> new UserDTO(s)).collect(Collectors.toList());
 		return userDTO;
 	}
 
-	public UserDTO get(Integer id) {
+	public UserDTO get(Long id) {
 		System.out.println("User get");
 		return new UserDTO(userRepository.findById(id).get());
 	}
 
-	public String delete(Integer id) {
+	public String delete(Long id) {
 		System.out.println("User delete");
 		Optional<User> user = userRepository.findById(id);
 		if (user == null)
@@ -58,24 +58,23 @@ public class UserService {
 			} else
 				count++;
 		}
-		List<User> userList=acc.stream().map(u->new User(u)).collect(Collectors.toList());
+		List<User> userList = acc.stream().map(u -> new User(u)).collect(Collectors.toList());
 		userRepository.deleteAll(userList);
-		return "deletion successful for : "+count+" Not succesful for: " + notfound;
+		return "deletion successful for : " + count + " Not succesful for: " + notfound;
 	}
 
-	public String login(List<UserDTO> details) {
+	public String login(UserDTO u) {
 		String username = "";
 		String password = "";
-		for (UserDTO u : details) {
+		
 			username = u.getUsername();
 			password = u.getPassword();
-		}
+		
 		List<User> us = userRepository.findByUsernameAndPassword(username, password);
 		if (us.isEmpty())
 			return "Not Found";
 		else
 			return "Login success";
-
 	}
 
 	public String forgot(UserDTO user) {
@@ -83,11 +82,22 @@ public class UserService {
 		String username = user.getUsername();
 		String question = user.getQuestion();
 		String answer = user.getPassword();
-
 		List<User> us = userRepository.findByUsernameAndQuestionAndAnswer(username, question, answer);
 		if (us.isEmpty())
 			return "Wrong entry";
 		else
 			return us.toString();
+	}
+
+	public User findByUsername(String username) 
+	{
+		return userRepository.findByUsername(username);
+		
+	}
+
+	public String addone(UserDTO user) {
+		System.out.println("in User add");
+		userRepository.save(new User(user));
+		return "save completed";
 	}
 }

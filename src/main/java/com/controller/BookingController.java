@@ -137,7 +137,7 @@ public class BookingController {
 
 	@PostMapping(value = "/{userId}/{numberOfSeats}/{busId}/{sourceId}/{destinationId}/{localdate}")
 	@ResponseBody
-	public String add(@PathVariable("userId") Integer userId, @PathVariable("numberOfSeats") int numberOfSeats,
+	public String add(@PathVariable("userId") Long userId, @PathVariable("numberOfSeats") int numberOfSeats,
 			@PathVariable("busId") Long busId, @PathVariable("sourceId") Integer sourceId,
 			@PathVariable("destinationId") Integer destinationId, @RequestBody List<Seat> seats,
 			@PathVariable(value = "localdate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfJourney) {

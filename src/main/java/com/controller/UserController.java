@@ -1,7 +1,6 @@
 package com.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.entity.User;
+import com.security.AuthenticationService;
 import com.service.UserService;
 import com.wrapper.UserDTO;
 
@@ -24,31 +23,39 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping
+	@Autowired
+	private AuthenticationService authenticationService;
+	
+	@PostMapping("/addMany")
 	@ResponseBody
-	public String newacc(@RequestBody List<UserDTO> acc) 
-	{
+	public String manynewacc(@RequestBody List<UserDTO> acc) {
 		System.out.println("in user post");
 		return userService.add(acc);
 	}
 
+	@PostMapping
+	@ResponseBody
+	public String newacc(@RequestBody UserDTO acc) {
+		System.out.println("in user post");
+		return userService.addone(acc);
+	}
+	
 	@PostMapping("/login")
 	@ResponseBody
-	public String login(@RequestBody List<UserDTO> details) {
+	public String login(@RequestBody UserDTO details) {
 		return userService.login(details);
 	}
 
 	@GetMapping(value = "/{id}")
-	public UserDTO getid(@PathVariable(value = "id") Integer id) {
+	public UserDTO getid(@PathVariable(value = "id") Long id) {
 		return userService.get(id);
 	}
 
 	@GetMapping
-	public List<UserDTO> getAllUsers()
-	{
+	public List<UserDTO> getAllUsers() {
 		return userService.getAll();
 	}
-	
+
 	@PostMapping(value = "/forgot")
 	@ResponseBody
 	public String forgot(@RequestBody UserDTO user) {
@@ -57,7 +64,7 @@ public class UserController {
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseBody
-	public String deleteById(@PathVariable(value = "id") Integer id) {
+	public String deleteById(@PathVariable(value = "id") Long id) {
 		return userService.delete(id);
 	}
 
@@ -65,6 +72,11 @@ public class UserController {
 	@ResponseBody
 	public String deleteByBody(@RequestBody List<UserDTO> acc) {
 		return userService.delete(acc);
+	}
+	
+	@PostMapping(value = "/logout")
+	void logOut() {
+		authenticationService.revokeToken();
 	}
 
 }

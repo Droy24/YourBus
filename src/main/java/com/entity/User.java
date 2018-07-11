@@ -20,7 +20,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer userid;
+	private Long userid;
 
 	@Column(name = "name")
 	private String name;
@@ -61,6 +61,9 @@ public class User {
 	@Column(name = "age")
 	private int age;
 
+	@Column(name = "role")
+	private String role;
+	
 	// @OneToMany
 	// private Booking ticket;
 
@@ -81,7 +84,7 @@ public class User {
 		this.question = userDTO.getQuestion();
 		this.type = userDTO.getType();
 		this.username = userDTO.getUsername();
-
+		this.role=userDTO.getRole();
 		if (userDTO.getWallet() != null)
 			this.wallet = new Account(userDTO.getWallet());
 	}
@@ -101,8 +104,26 @@ public class User {
 		this.insuranceId = insurance;
 		this.birthday = birthday;
 		this.age = age;
+		
 	}
+	public User(String name, String email, String username, String password, String question, String answer,
+			Long mobile, String address, String insurance, LocalDate birthday, int age,String role) {
 
+		// this.userid = userid;
+		this.name = name;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.question = question;
+		this.answer = answer;
+		this.mobile = mobile;
+		this.address = address;
+		this.insuranceId = insurance;
+		this.birthday = birthday;
+		this.age = age;
+		this.role=role;
+		
+	}
 	public String getQuestion() {
 		return question;
 	}
@@ -119,11 +140,11 @@ public class User {
 		this.answer = answer;
 	}
 
-	public Integer getUserid() {
+	public Long getUserid() {
 		return userid;
 	}
 
-	public void setUserid(Integer userid) {
+	public void setUserid(Long userid) {
 		this.userid = userid;
 	}
 
@@ -174,6 +195,14 @@ public class User {
 	// public void setTicket(List<Ticket> ticket) {
 	// this.ticket = ticket;
 	// }
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	public Long getMobile() {
 		return mobile;
