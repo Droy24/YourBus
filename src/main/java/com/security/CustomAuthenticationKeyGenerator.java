@@ -27,7 +27,6 @@ import com.config.Constants;
  * by taking account into the "Scope", "UserName", "Client_ID" and "UUID". We
  * added support for UUID check as well to generate unique key per unique
  * device.
- * 
  * @author Avinash
  *
  */

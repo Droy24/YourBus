@@ -104,6 +104,18 @@ public class PropConfig implements InitializingBean {
 	@Value("${spring.accessToken.seconds}")
 	private int accessTokenExpirySeconds;
 
+
+	@Value("${spring.mail.port}")
+	private String smtpPort;
+
+	@Value("${spring.mail.host}")
+	private String smtpHost;
+
+	@Value("${spring.mail.username}")
+	private String smtpUserName;
+
+	@Value("${spring.mail.password}")
+	private String smtpPassword;
 	
 	public PropConfig() {
 		logger.info("PropConfog initialized");

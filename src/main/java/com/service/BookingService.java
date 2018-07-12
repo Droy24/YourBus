@@ -20,6 +20,7 @@ import com.repository.BookingRepository;
 import com.repository.BusRepository;
 import com.repository.StationRepository;
 import com.repository.UserRepository;
+import com.security.AuthenticationService;
 import com.utility.Mail;
 import com.wrapper.BookingDTO;
 import com.wrapper.BusDTO;
@@ -29,7 +30,9 @@ public class BookingService {
 
 	@Autowired
 	private ApplicationService applicationService;
-
+	
+	@Autowired
+	private AuthenticationService authenticationService;
 	@Autowired
 	private BookingRepository bookingRepository;
 
@@ -61,6 +64,10 @@ public class BookingService {
 		return "Mail sent";
 	}
 
+	public String sendEditedMail() {
+		return "";
+	}
+	
 	public BookingDTO get(Integer id) {
 		if (bookingRepository.findById(id) == null) {
 			return null;
@@ -75,9 +82,18 @@ public class BookingService {
 		int numberOfSeats;
 		Bus bus;
 		Station source;
-		User user;
 		Station destination;
 		validateAddBooking(bookingDTO);
+		User user = authenticationService.getAuthenticatedUser();
+		System.out.println("user authenticated");
+		//		if (bookingDTO.getUserDTO().equals(null)) {
+//			return "Fill user Id /details";
+//		} else {
+//			user = userRepository.findById(bookingDTO.getUserDTO().getUserid()).get();
+//		}
+		if(user==null)return "invalid user";
+		
+		
 		if (!bookingDTO.getSeatDTO().isEmpty()) 
 		{
 			seats = bookingDTO.getSeatDTO().stream().map(Seat::new).collect(Collectors.toList());
@@ -103,11 +119,7 @@ public class BookingService {
 		} else {
 			destination = stationRepository.findById(bookingDTO.getDestination().getStationId()).get();
 		}
-		if (bookingDTO.getUserDTO().equals(null)) {
-			return "Fill user Id /details";
-		} else {
-			user = userRepository.findById(bookingDTO.getUserDTO().getUserid()).get();
-		}
+		
 		if (bookingDTO.getDateOfJourney().equals(null)) {
 			return "Fill date of journey";
 		} else {
@@ -294,10 +306,7 @@ public class BookingService {
 			logger.error("Please enter valid destination.");
 			throw new UnprocessableEntityException("Please enter valid destination.");
 		}
-		if (bookingDTO.getUserDTO() == null || bookingDTO.getUserDTO().getUserid() < 1) {
-			logger.error("Please enter valid User Id.");
-			throw new UnprocessableEntityException("Please enter valid user Id.");
-		}
+		logger.info("Validation of Booking success");
 	}
 	
 

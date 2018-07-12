@@ -78,8 +78,7 @@ public class Booking {
 		this.bookingId = bookingDTO.getBookingId();
 		if (bookingDTO.getBusDTO() != null)
 			this.bus = new Bus(bookingDTO.getBusDTO());
-		if (bookingDTO.getUserDTO() != null)
-			this.user = new User(bookingDTO.getUserDTO());
+		
 		if (bookingDTO.getSeatDTO() != null)
 			this.seat = bookingDTO.getSeatDTO().stream().map(s -> new Seat(s)).collect(Collectors.toList());
 		if (bookingDTO.getFrom() != null)

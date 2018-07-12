@@ -79,13 +79,22 @@ public class BookingController {
 	public List<BookingDTO> getAllBookings() {
 		return bookingService.getAllBookings();
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
+	@PostMapping
+	public String sendEditedMail() {
+		return bookingService.sendEditedMail();
+	}
+	
 	/**
 	 * PostRequest to add single booking for admin
 	 * 
 	 * @param booking
 	 * @return
 	 */
+	
 	
 	@PostMapping("/new")
 	@ResponseBody
