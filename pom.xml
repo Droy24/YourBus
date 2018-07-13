@@ -26,6 +26,11 @@
 	</properties>
 
 	<dependencies>
+	<dependency>
+  <groupId>com.twilio.sdk</groupId>
+  <artifactId>twilio</artifactId>
+  <version>7.21.7</version>
+</dependency>
 		<dependency>
 			<groupId>com.icegreen</groupId>
 			<artifactId>greenmail</artifactId>
@@ -89,6 +94,20 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+				<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+<!-- 			<version>4.2.1.RELEASE</version> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<version>2.0.9.RELEASE</version>
+		</dependency>
+		
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

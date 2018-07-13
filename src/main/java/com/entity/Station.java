@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.lang.Nullable;
+//import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wrapper.StationDTO;
 
 @Entity
-@Table(name = "station")
+@Table(name = "Station")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "stationId", scope = Station.class)
 public class Station {
 
@@ -27,11 +27,10 @@ public class Station {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer stationId;
 
-	@Nullable
 	private String stationName;
 
 	@OneToMany(fetch = FetchType.LAZY)
-	@Nullable
+//	@Nullable
 	private List<Bus> busList;
 
 	public Station(Integer stationId, String stationname, List<Bus> busList) {

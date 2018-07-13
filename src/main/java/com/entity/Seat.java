@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wrapper.SeatDTO;
 
 @Entity
-@Table(name = "seat")
+@Table(name = "Seat")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "seatid", scope = Seat.class)
 public class Seat {
 

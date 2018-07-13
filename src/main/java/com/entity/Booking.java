@@ -13,17 +13,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.joda.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wrapper.BookingDTO;
 
 @Entity
+@Table(name = "Booking")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "bookingId", scope = Booking.class)
 public class Booking {
 
@@ -40,7 +39,7 @@ public class Booking {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "seat_booking", joinColumns = { @JoinColumn(name = "bookingId") }, inverseJoinColumns = {
-	@JoinColumn(name = "seatid") })
+			@JoinColumn(name = "seatid") })
 	private List<Seat> seat;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -56,13 +55,14 @@ public class Booking {
 	private int fare;
 
 	private LocalDate dateOfJourney;
-	
+
 	private LocalDate dateOfBooking;
 
-	public Booking() {}
+	public Booking() {
+	}
 
 	public Booking(Integer bookingId, Bus busId, User user, List<Seat> seat, Station from, Station destination,
-			int fare, LocalDate dateOfjourney,LocalDate dateOfBooking) {
+			int fare, LocalDate dateOfjourney, LocalDate dateOfBooking) {
 		this.bookingId = bookingId;
 		this.bus = busId;
 		this.user = user;
@@ -71,34 +71,34 @@ public class Booking {
 		this.destination = destination;
 		this.fare = fare;
 		this.dateOfJourney = dateOfjourney;
-		this.dateOfBooking=dateOfBooking;
+		this.dateOfBooking = dateOfBooking;
 	}
 
 	public Booking(BookingDTO bookingDTO) {
 		this.bookingId = bookingDTO.getBookingId();
-		if(bookingDTO.getBusDTO()!=null)
-		this.bus = new Bus(bookingDTO.getBusDTO());	
-		if(bookingDTO.getUserDTO()!=null)
-		this.user = new User(bookingDTO.getUserDTO());
-		if(bookingDTO.getSeatDTO()!=null)
-		this.seat = bookingDTO.getSeatDTO().stream().map(s -> new Seat(s)).collect(Collectors.toList());
-		if(bookingDTO.getFrom()!=null)
-		this.from = new Station(bookingDTO.getFrom());
-		if(bookingDTO.getDestination()!=null)
-		this.destination = new Station(bookingDTO.getDestination());
+		if (bookingDTO.getBusDTO() != null)
+			this.bus = new Bus(bookingDTO.getBusDTO());
+		
+		if (bookingDTO.getSeatDTO() != null)
+			this.seat = bookingDTO.getSeatDTO().stream().map(s -> new Seat(s)).collect(Collectors.toList());
+		if (bookingDTO.getFrom() != null)
+			this.from = new Station(bookingDTO.getFrom());
+		if (bookingDTO.getDestination() != null)
+			this.destination = new Station(bookingDTO.getDestination());
 		this.fare = bookingDTO.getFare();
 		this.dateOfJourney = bookingDTO.getDateOfJourney();
-		this.dateOfBooking=bookingDTO.getDateOfBooking();
+		this.dateOfBooking = bookingDTO.getDateOfBooking();
 	}
 
-	public Booking(Bus bus, Station from, Station destination, List<Seat> seat,LocalDate dateOfJourney,User user,int fare,LocalDate dateOfBooking) {
-		this.fare=fare;
-		this.user=user;
+	public Booking(Bus bus, Station from, Station destination, List<Seat> seat, LocalDate dateOfJourney, User user,
+			int fare, LocalDate dateOfBooking) {
+		this.fare = fare;
+		this.user = user;
 		this.bus = bus;
 		this.from = from;
-		this.dateOfBooking=dateOfBooking;
+		this.dateOfBooking = dateOfBooking;
 		this.destination = destination;
-		this.dateOfJourney=dateOfJourney;
+		this.dateOfJourney = dateOfJourney;
 		if (!seat.isEmpty()) {
 			this.seat = seat;
 		}
@@ -206,5 +206,5 @@ public class Booking {
 			return false;
 		return true;
 	}
-	
+
 }

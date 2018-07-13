@@ -27,7 +27,6 @@ public class AccountController {
 	@ResponseBody
 	public String newacc(@RequestBody List<Account> acc) {
 		return accountService.add(acc);
-
 	}
 
 	@GetMapping(value = "/{id}")

@@ -18,7 +18,7 @@ public class BookingDTO {
 
 	private BusDTO busDTO;
 
-	private UserDTO userDTO;
+//	private UserDTO userDTO;
 
 	private List<SeatDTO> seatDTO;
 
@@ -56,8 +56,7 @@ public class BookingDTO {
 		this.bookingId = booking.getBookingId();
 		if (bus != null)
 			this.busDTO = new BusDTO(bus);
-		if (user != null)
-			this.userDTO = new UserDTO(user);
+		
 		if (seat != null)
 			this.seatDTO = seat.stream().map(s -> new SeatDTO(s)).collect(Collectors.toList());
 		if (from != null)
@@ -97,14 +96,14 @@ public class BookingDTO {
 		this.busDTO = busDTO;
 	}
 
-	public UserDTO getUserDTO() {
+	/*public UserDTO getUserDTO() {
 		return userDTO;
 	}
 
 	public void setUserDTO(UserDTO userDTO) {
 		this.userDTO = userDTO;
 	}
-
+*/
 	public List<SeatDTO> getSeatDTO() {
 		return seatDTO;
 	}

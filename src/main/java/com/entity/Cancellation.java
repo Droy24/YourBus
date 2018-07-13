@@ -22,7 +22,7 @@ import com.wrapper.CancellationDTO;
 import com.wrapper.SeatDTO;
 
 @Entity
-@Table(name = "cancel")
+@Table(name = "Cancel")
 public class Cancellation {
 
 	@Id

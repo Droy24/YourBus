@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.wrapper.RouteDTO;
 
 @Entity
-@Table(name = "route")
+@Table(name = "Route")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "routeId")
 public class Route {
 

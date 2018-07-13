@@ -17,8 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.joda.time.DateTime;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wrapper.BusDTO;
 
 @Entity

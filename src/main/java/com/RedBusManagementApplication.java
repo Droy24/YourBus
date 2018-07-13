@@ -7,12 +7,14 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.service.EmailService;
 import com.utility.Mail;
 
 @SpringBootApplication
+@EnableAutoConfiguration
 public class RedBusManagementApplication {
 //	private static Logger log = LoggerFactory.getLogger(Application.class);
 
