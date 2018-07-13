@@ -13,8 +13,8 @@ import com.twilio.rest.api.v2010.account.Message;
 @RestController
 @RequestMapping("/sms")
 public class SmsController {
-	public static final String ACCOUNT_SID = "AC5ab5c949d53901fcad421921f1ee6a57";
-	public static final String AUTH_TOKEN = "74504efee24673429a1cdbb12dfbfe53";
+	public static final String ACCOUNT_SID = "****";
+	public static final String AUTH_TOKEN = "******";
 
 	@GetMapping
 	public String sendSms() {
