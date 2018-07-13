@@ -26,6 +26,11 @@
 	</properties>
 
 	<dependencies>
+	<dependency>
+  <groupId>com.twilio.sdk</groupId>
+  <artifactId>twilio</artifactId>
+  <version>7.21.7</version>
+</dependency>
 		<dependency>
 			<groupId>com.icegreen</groupId>
 			<artifactId>greenmail</artifactId>

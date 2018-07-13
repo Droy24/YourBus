@@ -83,7 +83,7 @@ public class BookingController {
 	 * 
 	 * @return
 	 */
-	@PostMapping
+	@PostMapping("/editedmail")
 	public String sendEditedMail() {
 		return bookingService.sendEditedMail();
 	}
