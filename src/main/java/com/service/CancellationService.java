@@ -6,12 +6,15 @@ import java.util.stream.Collectors;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.entity.Booking;
 import com.entity.Cancellation;
 import com.entity.Seat;
+import com.exception.UnprocessableEntityException;
 import com.repository.BookingRepository;
 import com.repository.BusRepository;
 import com.repository.CancellationRepository;
@@ -37,6 +40,8 @@ public class CancellationService {
 	@Autowired
 	BusService busService;
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	public List<CancellationDTO> getAll() {
 		List<CancellationDTO> cancellationList = cancellationRepository.findAll().stream().map(CancellationDTO::new)
 				.collect(Collectors.toList());
@@ -57,13 +62,24 @@ public class CancellationService {
 
 	public String add(CancellationDTO cancellationDTO) {
 		int refund = 0;
-		Integer bookingId = cancellationDTO.getBookingDTO().getBookingId();
-		LocalDate cancellationDate = LocalDate.now();
+		Integer bookingId = null;
+		LocalDate dateOfJourney = null;
+		if (cancellationDTO.getBookingDTO().getBookingId() > 0)
+			bookingId = cancellationDTO.getBookingDTO().getBookingId();
+		else {
+			return "Enter valid Bus Id";
+		}
 		Booking booking = bookingRepository.findById(bookingId).get();
 		if (booking == null)
 			return "Booking doesnt exists";
-		LocalDate dateOfJourney = booking.getDateOfJourney();
-		if (cancellationDate.isAfter(dateOfJourney)) {
+		LocalDate cancellationDate = LocalDate.now();
+		if (booking.getDateOfJourney() != null)
+			dateOfJourney = booking.getDateOfJourney();
+		else {
+			return "valid dateOfJourney";
+		}
+		if (cancellationDate.isAfter(dateOfJourney)) 
+		{
 			return " Ticket cannot be cancelled after Journey date";
 		}
 		List<Seat> cancelSeats = new ArrayList<>();
@@ -125,7 +141,13 @@ public class CancellationService {
 
 	public String delete(CancellationDTO cancellationDTO) {
 		Cancellation cancel = new Cancellation(cancellationDTO);
-		Long cancellationId = cancel.getCancellationId();
+		Long cancellationId = null;
+		if (cancel.getCancellationId() > 0)
+			cancellationId = cancel.getCancellationId();
+		else {
+			logger.error("Please enter valid route.");
+			throw new UnprocessableEntityException("Route does not exists.");
+		}
 		if (cancellationRepository.findById(cancellationId).isPresent()) {
 			cancellationRepository.deleteById(cancellationId);
 			return "Cancel ticket entry deleted";

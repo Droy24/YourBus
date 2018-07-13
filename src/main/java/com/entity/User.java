@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.joda.time.LocalDate;
+import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wrapper.UserDTO;
@@ -23,6 +24,7 @@ public class User {
 	private Long userid;
 
 	@Column(name = "name")
+	@Nullable
 	private String name;
 
 	@Column(name = "email")
@@ -34,13 +36,15 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
-	@Column(name = "type")
+	@Column(name = "type" ,columnDefinition = "boolean default normal")
 	private String type;
 
 	@Column(name = "question")
+	@Nullable
 	private String question;
 
 	@Column(name = "answer")
+	@Nullable
 	private String answer;
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -50,15 +54,19 @@ public class User {
 	private Long mobile;
 
 	@Column(name = "address")
+	@Nullable
 	private String address;
 
 	@Column(name = "insuranceId")
+	@Nullable
 	private String insuranceId; // boolean type
 
 	@Column(name = "date")
+	@Nullable
 	private LocalDate birthday;
 
 	@Column(name = "age")
+	@Nullable
 	private int age;
 
 	@Column(name = "role")
